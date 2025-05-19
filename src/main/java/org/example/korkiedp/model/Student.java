@@ -6,9 +6,17 @@ public class Student {
     private int id;
     private String name;
 
+    // Empty
     public Student() {}
 
-    public Student(String name, String email, String phone, String notes) {
+    // Register
+    public Student(String name) {
+        this.name = name;
+    }
+
+    // Full
+    public Student(int id, String name) {
+        this.id = id;
         this.name = name;
     }
 
