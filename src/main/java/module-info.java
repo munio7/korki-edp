@@ -7,6 +7,8 @@ module org.example.korkiedp {
     requires net.synedra.validatorfx;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
+    requires java.sql;
+    requires org.apache.commons.configuration2;
 
     opens org.example.korkiedp to javafx.fxml;
     exports org.example.korkiedp.app;
