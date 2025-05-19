@@ -39,7 +39,6 @@ public class TutorDAO {
             ResultSet rs = stmt.getGeneratedKeys();
 
             if (rs.next()) {
-                int id = rs.getInt(1);
                 tutor.setId(rs.getInt(1));
             }
         } catch (Exception e) {
