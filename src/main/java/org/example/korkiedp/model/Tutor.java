@@ -11,6 +11,7 @@ public class Tutor {
     private String email;
     private LocalDateTime created_at;
 
+    // Full
     public Tutor(int id, String username, String password_hash, String full_name, String email, LocalDateTime created_at) {
         this.id = id;
         this.username = username;
@@ -20,14 +21,29 @@ public class Tutor {
         this.created_at = created_at;
     }
 
-
+    // Register
     public Tutor(String username, String password_hash, String full_name, String email) {
         this.username = username;
         this.password_hash = password_hash;
         this.full_name = full_name;
         this.email = email;
     }
+    // Updating
+    public Tutor(int id, String username, String password_hash, String full_name, String email) {
+        this.id = id;
+        this.username = username;
+        this.password_hash = password_hash;
+        this.full_name = full_name;
+        this.email = email;
+    }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;
@@ -73,5 +89,7 @@ public class Tutor {
     public String toString() {
         return full_name + " (" + username + ")";
     }
+
+
 }
 

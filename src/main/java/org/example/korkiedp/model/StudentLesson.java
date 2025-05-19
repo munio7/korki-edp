@@ -34,8 +34,6 @@ public class StudentLesson {
         this.paid = false;
     }
 
-    // --- Gettery i settery ---
-
     public int getId() {
         return id;
     }
