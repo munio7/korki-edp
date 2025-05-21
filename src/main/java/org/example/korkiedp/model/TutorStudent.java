@@ -14,18 +14,69 @@ public class TutorStudent {
     private String preferred_hours;
     private String level;
     private String notes;
+    private LocalDateTime created_at;
     private LocalDateTime last_contacted_at;
 
-
+    // Empty
     public TutorStudent() {}
+
+    // Full
+    public TutorStudent(int tutorId, int studentId, LocalDate start_date, boolean active, BigDecimal default_price, String preferred_days, String preferred_hours, String level, String notes, LocalDateTime last_contacted_at,LocalDateTime created_at) {
+        this.tutorId = tutorId;
+        this.studentId = studentId;
+        this.start_date = start_date;
+        this.active = active;
+        this.default_price = default_price;
+        this.preferred_days = preferred_days;
+        this.preferred_hours = preferred_hours;
+        this.level = level;
+        this.notes = notes;
+        this.created_at = created_at;
+        this.last_contacted_at = last_contacted_at;
+    }
 
     public TutorStudent(int tutorId, int studentId) {
         this.tutorId = tutorId;
         this.studentId = studentId;
         this.active = true;
         this.start_date = LocalDate.now();
-    }
+        this.default_price = BigDecimal.ZERO;
+        this.preferred_days = "";
+        this.preferred_hours = "";
+        this.level = "";
+        this.notes = "";
+        this.created_at = LocalDateTime.now();
+        this.last_contacted_at = null;
 
+
+    }
+    public TutorStudent(int tutorId, int studentId, boolean active, BigDecimal default_price, String preferred_days, String preferred_hours, String level, String notes) {
+        this.tutorId = tutorId;
+        this.studentId = studentId;
+        this.active = true;
+        this.start_date = LocalDate.now();
+        this.default_price = BigDecimal.ZERO;
+        this.preferred_days = "";
+        this.preferred_hours = "";
+        this.level = "";
+        this.notes = "";
+        this.created_at = LocalDateTime.now();
+        this.last_contacted_at = null;
+
+        this.tutorId = tutorId;
+        this.studentId = studentId;
+        this.active = true;
+        this.start_date = LocalDate.now();
+        this.default_price = BigDecimal.ZERO;
+        this.preferred_days = "";
+        this.preferred_hours = "";
+        this.level = "";
+        this.notes = "";
+        this.created_at = LocalDateTime.now();
+        this.last_contacted_at = null;
+
+
+    }
 
     public int getTutorId() {
         return tutorId;
@@ -51,7 +102,7 @@ public class TutorStudent {
         this.start_date = start_date;
     }
 
-    public boolean isActive() {
+    public boolean getActive() {
         return active;
     }
 
@@ -97,5 +148,26 @@ public class TutorStudent {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public LocalDateTime getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(LocalDateTime created_at) {
+        this.created_at = created_at;
+    }
+
+    public LocalDateTime getLastContactedAt() {
+        return last_contacted_at;
+    }
+
+    public void setLastContactedAt(LocalDateTime last_contacted_at) {
+        this.last_contacted_at = last_contacted_at;
+    }
+
+    @Override
+    public String toString() {
+        return "TutorStudent{ tutorId=" + tutorId + ", studentId=" + studentId + ", start_date=" + start_date + '}';
     }
 }
