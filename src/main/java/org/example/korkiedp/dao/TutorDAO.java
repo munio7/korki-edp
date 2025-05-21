@@ -26,6 +26,26 @@ public class TutorDAO {
         }
         return tutor;
     }
+    public static Tutor findByLogin(String login){
+        Tutor tutor = null;
+        String sql = "SELECT * FROM tutors WHERE login = ?";
+        try(Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, login);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                tutor = new Tutor(rs.getInt(1),rs.getString(2),rs.getString(3));
+            }
+            else {
+                System.out.println("Tutor not found");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } ;
+
+
+        return tutor;
+    }
 
     public static void save(Tutor tutor) {
         String sql = "INSERT INTO tutors(username, password_hash, full_name, email) VALUES(?, ?, ?, ?)";
