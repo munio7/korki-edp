@@ -47,7 +47,7 @@ public class TutorDAO {
         return tutor;
     }
 
-    public static void save(Tutor tutor) {
+    public static Tutor save(Tutor tutor) {
         String sql = "INSERT INTO tutors(username, password_hash, full_name, email) VALUES(?, ?, ?, ?)";
         try(Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, tutor.getUsername());
@@ -64,6 +64,7 @@ public class TutorDAO {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        return tutor;
     }
 
     public static ArrayList<Tutor> findAll() {
