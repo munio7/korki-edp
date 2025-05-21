@@ -36,6 +36,12 @@ public class Tutor {
         this.full_name = full_name;
         this.email = email;
     }
+    // Login
+    public Tutor(int id, String login, String password_hash) {
+        this.id = id;
+        this.username = login;
+        this.password_hash = password_hash;
+    }
 
     public int getId() {
         return id;
