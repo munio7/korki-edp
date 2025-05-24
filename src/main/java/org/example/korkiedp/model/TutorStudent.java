@@ -16,12 +16,13 @@ public class TutorStudent {
     private String notes;
     private LocalDateTime created_at;
     private LocalDateTime last_contacted_at;
+    private String default_name;
 
     // Empty
     public TutorStudent() {}
 
     // Full
-    public TutorStudent(int tutorId, int studentId, LocalDate start_date, boolean active, BigDecimal default_price, String preferred_days, String preferred_hours, String level, String notes, LocalDateTime last_contacted_at,LocalDateTime created_at) {
+    public TutorStudent(int tutorId, int studentId, LocalDate start_date, boolean active, BigDecimal default_price, String preferred_days, String preferred_hours, String level, String notes, LocalDateTime last_contacted_at,LocalDateTime created_at,String default_name) {
         this.tutorId = tutorId;
         this.studentId = studentId;
         this.start_date = start_date;
@@ -33,6 +34,7 @@ public class TutorStudent {
         this.notes = notes;
         this.created_at = created_at;
         this.last_contacted_at = last_contacted_at;
+        this.default_name = default_name;
     }
 
     public TutorStudent(int tutorId, int studentId) {
@@ -110,11 +112,11 @@ public class TutorStudent {
         this.active = active;
     }
 
-    public BigDecimal getDefaultPrice() {
+    public BigDecimal getDefault_price() {
         return default_price;
     }
 
-    public void setDefaultPrice(BigDecimal default_price) {
+    public void setDefault_price(BigDecimal default_price) {
         this.default_price = default_price;
     }
 
@@ -166,8 +168,16 @@ public class TutorStudent {
         this.last_contacted_at = last_contacted_at;
     }
 
+    public String getDefault_name() {
+        return default_name;
+    }
+
+    public void setDefault_name(String default_name) {
+        this.default_name = default_name;
+    }
+
     @Override
     public String toString() {
-        return "TutorStudent{ tutorId=" + tutorId + ", studentId=" + studentId + ", start_date=" + start_date + '}';
+        return "TutorStudent{ tutorId=" + tutorId + ", studentId=" + studentId + ", student's name=" + default_name + '}';
     }
 }
