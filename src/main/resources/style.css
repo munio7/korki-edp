@@ -1,0 +1,15 @@
+.button {
+    -fx-font-size: 14px;
+    -fx-background-radius: 5;
+    -fx-background-color: #3b5998;
+    -fx-text-fill: white;
+}
+
+.text-field, .password-field {
+    -fx-background-radius: 5;
+    -fx-font-size: 14px;
+}
+
+.label {
+    -fx-font-size: 13px;
+}
