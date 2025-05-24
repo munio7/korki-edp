@@ -1,0 +1,21 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.Button?>
+<StackPane prefHeight="400" prefWidth="1000" style="-fx-background-color: linear-gradient(to bottom right, #3b5998, #192f6a);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.korkiedp.controller.CalendarController">
+
+    <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" spacing="20" style="-fx-background-color: rgba(255,255,255,0.95); -fx-background-radius: 10;" StackPane.alignment="CENTER">
+
+        <padding>
+            <Insets bottom="40" left="40" right="40" top="40" />
+        </padding>
+        <Button text="Powrót"
+                onAction="#handleGoBack"
+                maxWidth="200"
+                style="-fx-background-color: #95a5a6; -fx-text-fill: white;"
+        />
+        <fx:include source="/calendarComponent.fxml" />
+
+
+    </VBox>
+</StackPane>

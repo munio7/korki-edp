@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx/23.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example.korkiedp.component.CalendarController"
+      spacing="10" >
+    <padding>
+        <Insets left="10" right="10" bottom="10" top="10" />
+    </padding>
+
+    <Label fx:id="monthLabel" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+    <GridPane fx:id="calendarGrid" hgap="5" vgap="5" />
+</VBox>
