@@ -1,0 +1,34 @@
+package org.example.korkiedp.controller;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.stage.Stage;
+import org.example.korkiedp.service.SceneSwitcherService;
+import org.example.korkiedp.service.TutorAuthService;
+import org.example.korkiedp.util.ConfigProvider;
+
+public class WelcomeController {
+
+    public Button loginButton;
+    public Button registerButton;
+
+    public void handleLogin(ActionEvent event) {
+        if (ConfigProvider.isSet("remember.login") && ConfigProvider.isSet("remember.password")) {
+            TutorAuthService.login((String) ConfigProvider.get("remember.login"),(String) ConfigProvider.get("remember.password"),false);
+            loadScene(event, "/main_panel.fxml");
+        }
+        else
+            loadScene(event,"/login.fxml");
+    }
+
+    public void handleRegister(ActionEvent event) {
+        loadScene(event,"/signup.fxml");
+    }
+
+    private void loadScene(ActionEvent sourceEvent, String fxmlPath) {
+        SceneSwitcherService.switchScene(sourceEvent,fxmlPath);
+    }
+}
