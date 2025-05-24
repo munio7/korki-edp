@@ -28,12 +28,12 @@ public class TutorDAO {
     }
     public static Tutor findByLogin(String login){
         Tutor tutor = null;
-        String sql = "SELECT * FROM tutors WHERE login = ?";
+        String sql = "SELECT * FROM tutors WHERE username = ?";
         try(Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, login);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                tutor = new Tutor(rs.getInt(1),rs.getString(2),rs.getString(3));
+                tutor = new Tutor(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getTimestamp(6).toLocalDateTime());
             }
             else {
                 System.out.println("Tutor not found");
