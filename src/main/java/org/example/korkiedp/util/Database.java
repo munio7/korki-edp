@@ -12,20 +12,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Database {
-    private static final PropertiesConfiguration config;
-
-    static {
-        Configurations configs = new Configurations();
-        try {
-            System.out.println("Loading configuration file...");
-            config = configs.properties(new File("src/main/resources/config.properties"));
-        } catch (ConfigurationException e) {
-            throw new RuntimeException("Could not load configuration", e);
-        }
-
-    }
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(config.getString("db.url"), config.getString("db.user"), config.getString("db.password"));
+        String url = (String) ConfigProvider.get("db.url");
+        String username = (String) ConfigProvider.get("db.user");
+        String password = (String) ConfigProvider.get("db.password");
+
+        return DriverManager.getConnection(url, username, password);
     }
 }
