@@ -23,7 +23,7 @@ public class TutorStudentDAO {
                 TutorStudent tutor_student = new TutorStudent(
                         rs.getInt(1),
                         rs.getInt(2),
-                        rs.getDate(3).toLocalDate(),
+                        (rs.getDate(3) != null) ? rs.getDate(3).toLocalDate() : null,
                         rs.getBoolean(4),
                         rs.getBigDecimal(5),
                         rs.getString(6),
@@ -31,9 +31,11 @@ public class TutorStudentDAO {
                         rs.getString(8),
                         rs.getString(9),
                         rs.getTimestamp(10).toLocalDateTime(),
-                        (rs.getTimestamp(11) != null) ? rs.getTimestamp(11).toLocalDateTime() : null
+                        (rs.getTimestamp(11) != null) ? rs.getTimestamp(11).toLocalDateTime() : null,
+                        rs.getString(12)
                 );
                 assigned_students.add(tutor_student);
+                System.out.println(tutor_student);
             }
 
             if (assigned_students == null) {
@@ -65,7 +67,8 @@ public class TutorStudentDAO {
                         rs.getString(8),
                         rs.getString(9),
                         rs.getTimestamp(10).toLocalDateTime(),
-                        (rs.getTimestamp(11) != null) ? rs.getTimestamp(11).toLocalDateTime() : null
+                        (rs.getTimestamp(11) != null) ? rs.getTimestamp(11).toLocalDateTime() : null,
+                        rs.getString(12)
                 );
                 assigned_tutors.add(tutor_student);
             }
@@ -92,7 +95,7 @@ public class TutorStudentDAO {
             stmt.setInt(1, tutor_student.getTutorId());
             stmt.setInt(2, tutor_student.getStudentId());
             stmt.setDate(3, Date.valueOf(tutor_student.getStartDate()));
-            stmt.setBigDecimal(4, tutor_student.getDefaultPrice());
+            stmt.setBigDecimal(4, tutor_student.getDefault_price());
             stmt.setString(5, tutor_student.getPreferredDays());
             stmt.setString(6, tutor_student.getPreferredHours());
             stmt.setString(7, tutor_student.getLevel());
@@ -132,7 +135,8 @@ public class TutorStudentDAO {
                         rs.getString(8),
                         rs.getString(9),
                         rs.getTimestamp(10).toLocalDateTime(),
-                        (rs.getTimestamp(11) != null) ? rs.getTimestamp(11).toLocalDateTime() : null
+                        (rs.getTimestamp(11) != null) ? rs.getTimestamp(11).toLocalDateTime() : null,
+                        rs.getString(12)
                 );
                 System.out.println("Found tutor_student: " + tutor_student);
             }
