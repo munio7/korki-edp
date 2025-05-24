@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" spacing="10" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.korkiedp.component.StudentsTableController">
+
+    <TableView fx:id="studentsTable" maxHeight="-Infinity" maxWidth="-Infinity">
+        <columns>
+            <TableColumn fx:id="nameColumn" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Uczeń" />
+            <TableColumn fx:id="levelColumn" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Poziom" />
+            <TableColumn fx:id="priceColumn" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Cena" />
+            <TableColumn fx:id="activeColumn" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Relacja" />
+        </columns>
+      <columnResizePolicy>
+         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+      </columnResizePolicy>
+    </TableView>
+</VBox>
