@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import jdk.jfr.Event;
 
@@ -26,10 +27,17 @@ public class SceneSwitcherService {
         }
     }
 
-    /**
-     * Overload without title.
-     */
     public static void switchScene(ActionEvent sourceEvent, String fxmlPath) {
         switchScene(sourceEvent, fxmlPath, null);
+    }
+
+    public static void loadView(String fxmlPath, Pane container) {
+        try {
+            Parent view = FXMLLoader.load(Objects.requireNonNull(SceneSwitcherService.class.getResource(fxmlPath)));
+            container.getChildren().setAll(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Log or show alert
+        }
     }
 }

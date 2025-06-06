@@ -1,26 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.BorderPane?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.korkiedp.controller.MainPanelController">
 
-<StackPane prefHeight="400" prefWidth="1000" style="-fx-background-color: linear-gradient(to bottom right, #3b5998, #192f6a);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.korkiedp.controller.MainPanelController">
+    <!-- Left: Navigation Menu -->
+    <left>
+        <VBox fx:id="navBar" spacing="10" alignment="TOP_CENTER" prefWidth="200" style="-fx-background-color: #2c3e50; -fx-padding: 15;">
+            <Label fx:id="welcomeLabel" text="Korki Panel" style="-fx-text-fill: white; -fx-font-size: 18;" />
+            <Button text="Students" prefWidth="150" onAction="#showStudentsView"/>
+            <Button text="Calendar" prefWidth="150" onAction="#showCalendarView"/>
+            <Button text="Payments" prefWidth="150" onAction="#showPaymentsView"/>
+            <Button text="Settings" prefWidth="150" onAction="#showSettingsView"/>
+        </VBox>
+    </left>
 
-    <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" spacing="20" style="-fx-background-color: rgba(255,255,255,0.95); -fx-background-radius: 10;" StackPane.alignment="CENTER">
+    <!-- Center: Main View Area -->
+    <center>
+        <StackPane fx:id="mainContent" style="-fx-background-color: #ecf0f1;" />
+    </center>
 
-        <padding>
-            <Insets bottom="40" left="40" right="40" top="40" />
-        </padding>
-        <Label fx:id="welcomeLabel" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Witaj, Tutor!" />
-        <Button text="Uczniowie" maxWidth="200" onAction="#handleStudents" style="-fx-background-color: #3b5998 ; -fx-text-fill: white;"/>
-        <Button text="Kalendarz" maxWidth="200" onAction="#handleCalendar" style="-fx-background-color: #3b5998 ; -fx-text-fill: white;"/>
-
-
-<!--        <Button maxWidth="200" onAction="#handleSchedule" style="-fx-background-color: #3b5998; -fx-text-fill: white;" text="Kalendarz" />-->
-<!--        <fx:include source="calendarComponent.fxml"/>-->
-        <Button maxWidth="200" onAction="#handleLogout" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Wyloguj się" />
-
-    </VBox>
-</StackPane>
+</BorderPane>

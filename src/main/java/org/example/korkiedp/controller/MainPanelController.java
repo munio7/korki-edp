@@ -1,22 +1,23 @@
 package org.example.korkiedp.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
-import javafx.scene.Node;
-import javafx.event.ActionEvent;
+import javafx.scene.layout.StackPane;
+import javafx.scene.Parent;
 import org.example.korkiedp.model.Tutor;
-import org.example.korkiedp.service.SceneSwitcherService;
-import org.example.korkiedp.service.TutorAuthService;
 import org.example.korkiedp.session.CurrentSession;
 
+import static org.example.korkiedp.service.SceneSwitcherService.loadView;
+
 public class MainPanelController {
+
+    @FXML private StackPane mainContent;
 
     @FXML
     private Label welcomeLabel;
 
+    @FXML
     private Tutor loggedTutor;
 
     public void initialize() {
@@ -25,18 +26,24 @@ public class MainPanelController {
     }
 
     @FXML
-    private void handleStudents(ActionEvent event) {
-        SceneSwitcherService.switchScene(event,"/students.fxml");
+    public void showStudentsView() {
+        loadView("/students.fxml", mainContent);
     }
 
     @FXML
-    private void handleLogout(ActionEvent event) {
-        TutorAuthService.logout();
-        SceneSwitcherService.switchScene(event, "/welcome.fxml", "Powitanie");
+    public void showCalendarView() {
+        loadView("/calendar.fxml",mainContent);
     }
 
     @FXML
-    public void handleCalendar(ActionEvent event) {
-        SceneSwitcherService.switchScene(event,"/calendar.fxml");
+    public void showPaymentsView() {
+        loadView("/payments.fxml",mainContent);
     }
+
+    @FXML
+    public void showSettingsView() {
+        loadView("/settings_view.fxml",mainContent);
+    }
+
+
 }
