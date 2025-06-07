@@ -5,6 +5,9 @@ import javafx.scene.control.*;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 import javafx.scene.Node;
+import org.example.korkiedp.component.InfoMessageController;
+import org.example.korkiedp.events.EventBus;
+import org.example.korkiedp.events.ShowMessageEvent;
 import org.example.korkiedp.service.TutorAuthService;
 import org.example.korkiedp.service.SceneSwitcherService;
 import org.example.korkiedp.model.Tutor;
@@ -25,8 +28,6 @@ public class LoginController {
     @FXML
     private Label errorLabel;
 
-    private final TutorAuthService authService = new TutorAuthService();
-
     @FXML
     private void handleLoginButtonClick(ActionEvent event) {
         String username = usernameField.getText().trim();
@@ -35,7 +36,7 @@ public class LoginController {
         Tutor tutor = TutorAuthService.login(username, password, rememberMeCheckBox.isSelected());
 
         if (tutor != null) {
-            SceneSwitcherService.switchScene(event, "/main_panel.fxml", "Panel główny");
+            SceneSwitcherService.switchScene("/main_panel.fxml", "Panel główny");
         } else {
             errorLabel.setText("Nieprawidłowy login lub hasło.");
         }
