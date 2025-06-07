@@ -1,10 +1,13 @@
 package org.example.korkiedp.controller;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import org.example.korkiedp.events.EditStudentEvent;
+import org.example.korkiedp.events.EventBus;
 import org.example.korkiedp.model.Tutor;
 import org.example.korkiedp.service.SceneSwitcherService;
 import org.example.korkiedp.service.TutorAuthService;
@@ -40,6 +43,15 @@ public class MainPanelController {
     private Tutor loggedTutor;
 
     public void initialize() {
+
+        EventBus.subscribe(EditStudentEvent.class, event -> {
+            Platform.runLater(() -> {
+                SceneSwitcherService.loadMainPanel("/editStudentView.fxml", (EditStudentController c) -> {
+                    c.setData(event.getTutorStudent());
+                });
+            });
+        });
+
         MainStageHolder.setMainPanelPane(mainContent);
         loggedTutor = CurrentSession.getTutor();
         welcomeLabel.setText("Witaj, " + loggedTutor.getFullName() + "!");
