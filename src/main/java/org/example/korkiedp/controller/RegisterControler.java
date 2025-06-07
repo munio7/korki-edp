@@ -23,8 +23,6 @@ public class RegisterControler {
     public Button registerButton;
     public TextField emailField;
 
-    TutorAuthService tutorAuthService = new TutorAuthService();
-
     @FXML
     private void handleRegisterButtonClick() {
         String username = usernameField.getText();
@@ -40,8 +38,7 @@ public class RegisterControler {
 
         String hashedPassword = PasswordUtil.hash(password);
 
-        Tutor tutor = new Tutor(username,hashedPassword,fullName,email);
-        Tutor registeredTutor = TutorDAO.save(tutor);
+        Tutor registeredTutor = TutorAuthService.register(new Tutor(username,hashedPassword,fullName,email));
 
         if (registeredTutor != null){
             errorLabel.setText("");
