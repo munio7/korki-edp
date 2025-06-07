@@ -8,10 +8,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.example.korkiedp.dao.TutorStudentDAO;
+import org.example.korkiedp.events.EditStudentEvent;
+import org.example.korkiedp.events.EventBus;
 import org.example.korkiedp.model.Student;
 import org.example.korkiedp.model.TutorStudent;
 import org.example.korkiedp.session.CurrentSession;
 
+import java.awt.desktop.SystemEventListener;
 import java.util.List;
 
 public class StudentsTableController {
@@ -31,10 +34,19 @@ public class StudentsTableController {
 
     @FXML
     public void initialize() {
+
+        studentsTable.setOnMouseClicked(event -> {
+            if (studentsTable.getSelectionModel().getSelectedItem() != null) {
+                System.out.println("Wszedłem");
+                TutorStudent selectedStudent = studentsTable.getSelectionModel().getSelectedItem();
+                EventBus.publish(new EditStudentEvent(selectedStudent));
+            }
+        });
+
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("default_name"));
         levelColumn.setCellValueFactory(cellData -> {
             String level = cellData.getValue().getLevel();
-            return new SimpleStringProperty( (level == "" || level == null) ? "Brak" : level );
+            return new SimpleStringProperty((level == "" || level == null) ? "Brak" : level);
         });
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("default_price"));
         activeColumn.setCellValueFactory(cellData -> {
@@ -48,6 +60,4 @@ public class StudentsTableController {
         tutorStudentList.setAll(fromDb);
 
     }
-
-
 }
