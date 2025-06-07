@@ -30,7 +30,7 @@ public class TutorStudentDAO {
                         rs.getString(7),
                         rs.getString(8),
                         rs.getString(9),
-                        rs.getTimestamp(10).toLocalDateTime(),
+                        (rs.getTimestamp(10) != null) ? rs.getTimestamp(10).toLocalDateTime() : null,
                         (rs.getTimestamp(11) != null) ? rs.getTimestamp(11).toLocalDateTime() : null,
                         rs.getString(12)
                 );
@@ -196,6 +196,47 @@ public class TutorStudentDAO {
 //            throw new RuntimeException(e);
 //        }
 //    }
+
+    public static boolean updateAll(TutorStudent tutorStudent) {
+        String sql = """
+        UPDATE tutor_student SET 
+            start_date = ?, 
+            active = ?, 
+            default_price = ?, 
+            preferred_days = ?, 
+            preferred_hours = ?, 
+            level = ?, 
+            notes = ?, 
+            last_contacted_at = ?, 
+            created_at = ?, 
+            student_name = ?
+        WHERE tutor_id = ? AND student_id = ?
+        """;
+
+        try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setDate(1, tutorStudent.getStartDate() != null ? Date.valueOf(tutorStudent.getStartDate()) : null);
+            stmt.setBoolean(2, tutorStudent.getActive());
+            stmt.setBigDecimal(3, tutorStudent.getDefault_price());
+            stmt.setString(4, tutorStudent.getPreferredDays());
+            stmt.setString(5, tutorStudent.getPreferredHours());
+            stmt.setString(6, tutorStudent.getLevel());
+            stmt.setString(7, tutorStudent.getNotes());
+            stmt.setTimestamp(8, tutorStudent.getLastContactedAt() != null ? Timestamp.valueOf(tutorStudent.getLastContactedAt()) : null);
+            stmt.setTimestamp(9, tutorStudent.getCreated_at() != null ? Timestamp.valueOf(tutorStudent.getCreated_at()) : null);
+            stmt.setString(10, tutorStudent.getDefault_name());
+
+            stmt.setInt(11, tutorStudent.getTutorId());
+            stmt.setInt(12, tutorStudent.getStudentId());
+
+            int affected = stmt.executeUpdate();
+            return affected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
     public static boolean updateStartDate(int tutorId, int studentId, LocalDate date) {
         String sql = "UPDATE tutor_student SET start_date = ? WHERE tutor_id = ? AND student_id = ?";
         try (PreparedStatement stmt = Database.getConnection().prepareStatement(sql)) {
