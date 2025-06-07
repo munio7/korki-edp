@@ -26,12 +26,14 @@ public class MessagePopupManager {
             messagePane.setLayoutX(x);
             messagePane.setLayoutY(50);
 
-            Pane root = (Pane) stage.getScene().getRoot();
-            root.getChildren().add(messagePane);
+            AnchorPane popupLayer = MainStageHolder.getPopupLayer();
+            if (popupLayer != null) {
+                popupLayer.getChildren().add(messagePane);
+            }
 
             // Auto-dismiss
             PauseTransition delay = new PauseTransition(Duration.seconds(3));
-            delay.setOnFinished(e -> root.getChildren().remove(messagePane));
+            delay.setOnFinished(e -> popupLayer.getChildren().remove(messagePane));
             delay.play();
 
         } catch (Exception e) {

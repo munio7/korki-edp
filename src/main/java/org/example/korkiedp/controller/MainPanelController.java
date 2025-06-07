@@ -10,9 +10,7 @@ import org.example.korkiedp.model.Tutor;
 import org.example.korkiedp.service.SceneSwitcherService;
 import org.example.korkiedp.service.TutorAuthService;
 import org.example.korkiedp.session.CurrentSession;
-
-import static org.example.korkiedp.service.SceneSwitcherService.loadView;
-import static org.example.korkiedp.service.SceneSwitcherService.switchScene;
+import org.example.korkiedp.session.MainStageHolder;
 
 public class MainPanelController {
 
@@ -25,34 +23,35 @@ public class MainPanelController {
     private Tutor loggedTutor;
 
     public void initialize() {
+        MainStageHolder.setMainPanelPane(mainContent);
         loggedTutor = CurrentSession.getTutor();
         welcomeLabel.setText("Witaj, " + loggedTutor.getFullName() + "!");
     }
 
     @FXML
     public void showStudentsView() {
-        loadView("/students.fxml", mainContent);
+        SceneSwitcherService.loadMainPanel("/students.fxml");
     }
 
     @FXML
     public void showCalendarView() {
-        loadView("/calendar.fxml",mainContent);
+        SceneSwitcherService.loadMainPanel("/calendar.fxml");
     }
 
     @FXML
     public void showPaymentsView() {
-        loadView("/payments.fxml",mainContent);
+        SceneSwitcherService.loadMainPanel("/payments.fxml");
     }
 
     @FXML
     public void showSettingsView() {
-        loadView("/settings_view.fxml",mainContent);
+        SceneSwitcherService.loadMainPanel("/settings_view.fxml");
     }
 
     @FXML
     public void logout(ActionEvent event) {
         TutorAuthService.logout();
-        SceneSwitcherService.switchScene("/welcome.fxml");
+        SceneSwitcherService.loadContentLayer("/welcome.fxml");
 
     }
 

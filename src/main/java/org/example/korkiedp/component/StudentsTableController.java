@@ -1,6 +1,8 @@
 package org.example.korkiedp.component;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -16,7 +18,6 @@ public class StudentsTableController {
 
     @FXML
     private TableView<TutorStudent> studentsTable;
-
     @FXML
     private TableColumn<TutorStudent, String> nameColumn;
     @FXML
@@ -25,6 +26,8 @@ public class StudentsTableController {
     public TableColumn<TutorStudent, String> priceColumn;
     @FXML
     public TableColumn<TutorStudent, String> activeColumn;
+
+    private final ObservableList<TutorStudent> tutorStudentList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
@@ -39,7 +42,12 @@ public class StudentsTableController {
             return new SimpleStringProperty(isActive ? "Aktywna" : "Nieaktywna");
         });
 
-        List<TutorStudent> tutorStudents = TutorStudentDAO.findByTutorId(CurrentSession.getTutorId());
-        studentsTable.getItems().setAll(tutorStudents);
+        studentsTable.setItems(tutorStudentList);
+
+        List<TutorStudent> fromDb = TutorStudentDAO.findByTutorId(CurrentSession.getTutorId());
+        tutorStudentList.setAll(fromDb);
+
     }
+
+
 }

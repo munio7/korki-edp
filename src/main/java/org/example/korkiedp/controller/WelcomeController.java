@@ -33,6 +33,6 @@ public class WelcomeController {
     }
 
     private void loadScene(String fxmlPath) {
-        SceneSwitcherService.switchScene(fxmlPath);
+        SceneSwitcherService.loadContentLayer(fxmlPath);
     }
 }

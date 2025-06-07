@@ -1,5 +1,6 @@
 package org.example.korkiedp.controller;
 
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.event.ActionEvent;
@@ -36,7 +37,8 @@ public class LoginController {
         Tutor tutor = TutorAuthService.login(username, password, rememberMeCheckBox.isSelected());
 
         if (tutor != null) {
-            SceneSwitcherService.switchScene("/main_panel.fxml", "Panel główny");
+            EventBus.publish(new ShowMessageEvent("Pomyślnie zalogowano", InfoMessageController.MessageType.SUCCESS));
+            SceneSwitcherService.loadContentLayer("/main_panel.fxml");
         } else {
             errorLabel.setText("Nieprawidłowy login lub hasło.");
         }
@@ -44,6 +46,6 @@ public class LoginController {
 
     @FXML
     private void handleBackToWelcome(ActionEvent event) {
-        SceneSwitcherService.switchScene("/welcome.fxml", "Welcome");
+        SceneSwitcherService.loadContentLayer("/welcome.fxml");
     }
 }
