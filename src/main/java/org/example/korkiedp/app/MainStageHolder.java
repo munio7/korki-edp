@@ -1,6 +1,5 @@
-package org.example.korkiedp.session;
+package org.example.korkiedp.app;
 
-import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;

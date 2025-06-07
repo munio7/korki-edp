@@ -2,16 +2,14 @@ package org.example.korkiedp.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
-import javafx.scene.Parent;
 import org.example.korkiedp.model.Tutor;
 import org.example.korkiedp.service.SceneSwitcherService;
 import org.example.korkiedp.service.TutorAuthService;
 import org.example.korkiedp.session.CurrentSession;
-import org.example.korkiedp.session.MainStageHolder;
+import org.example.korkiedp.app.MainStageHolder;
 
 public class MainPanelController {
 

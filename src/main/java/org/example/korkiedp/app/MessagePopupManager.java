@@ -1,13 +1,11 @@
-package org.example.korkiedp.session;
+package org.example.korkiedp.app;
 
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.korkiedp.component.InfoMessageController;
-import org.example.korkiedp.session.MainStageHolder;
 
 public class MessagePopupManager {
 

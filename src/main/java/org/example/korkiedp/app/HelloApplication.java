@@ -9,8 +9,6 @@ import javafx.stage.Stage;
 import org.example.korkiedp.events.EventBus;
 import org.example.korkiedp.events.ShowMessageEvent;
 import org.example.korkiedp.service.SceneSwitcherService;
-import org.example.korkiedp.session.MainStageHolder;
-import org.example.korkiedp.session.MessagePopupManager;
 
 import java.io.IOException;
 

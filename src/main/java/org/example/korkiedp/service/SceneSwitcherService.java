@@ -1,15 +1,10 @@
 package org.example.korkiedp.service;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
-import jdk.jfr.Event;
-import org.example.korkiedp.session.MainStageHolder;
+import org.example.korkiedp.app.MainStageHolder;
 
 
 import java.io.IOException;

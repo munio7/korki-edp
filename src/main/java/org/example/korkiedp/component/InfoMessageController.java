@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import org.example.korkiedp.session.MainStageHolder;
+import org.example.korkiedp.app.MainStageHolder;
 
 public class InfoMessageController {
 
