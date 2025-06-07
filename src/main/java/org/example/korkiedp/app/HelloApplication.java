@@ -1,11 +1,13 @@
 package org.example.korkiedp.app;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import org.example.korkiedp.events.EditStudentEvent;
 import org.example.korkiedp.events.EventBus;
 import org.example.korkiedp.events.ShowMessageEvent;
 import org.example.korkiedp.service.SceneSwitcherService;
@@ -18,8 +20,11 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
         // Subscribe popup listener globally
         EventBus.subscribe(ShowMessageEvent.class, event -> {
-            MessagePopupManager.show(event.getMessage(), event.getType());
+            Platform.runLater(() -> {
+                MessagePopupManager.show(event.getMessage(), event.getType());
+            });
         });
+
 
         // Load base layout
         FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/appRoot.fxml"));
@@ -33,7 +38,7 @@ public class HelloApplication extends Application {
         MainStageHolder.set(stage, popupLayer, contentLayer);
 
         // Load initial view
-        SceneSwitcherService.loadView("/welcome.fxml", contentLayer);
+        SceneSwitcherService.loadContentLayer("/welcome.fxml");
 
         // Set up stage
         Scene scene = new Scene(root);
