@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<HBox alignment="CENTER" StackPane.alignment="CENTER"
+      fx:controller="org.example.korkiedp.controller.EditStudentController"
+      xmlns="http://javafx.com/javafx/8"
+      xmlns:fx="http://javafx.com/fxml/1">
+<VBox
+        spacing="15"
+        alignment="CENTER"
+        maxHeight="-Infinity"
+        style="-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 10;"
+>
+
+    <padding>
+        <Insets left="20" right="20" bottom="20" top="20" />
+    </padding>
+
+    <Label text="Edytuj ucznia" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Imię i nazwisko:"/>
+        <TextField fx:id="nameField" prefWidth="200"/>
+    </HBox>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Poziom:"/>
+        <TextField fx:id="levelField" prefWidth="200"/>
+    </HBox>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Cena domyślna:"/>
+        <TextField fx:id="priceField" prefWidth="100"/>
+    </HBox>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Relacja aktywna:"/>
+        <CheckBox fx:id="activeCheckbox"/>
+    </HBox>
+
+    <VBox spacing="5" alignment="CENTER_LEFT">
+        <Label text="Preferowane dni:"/>
+        <FlowPane fx:id="daysPane" hgap="10" vgap="5">
+            <CheckBox text="Poniedziałek"/>
+            <CheckBox text="Wtorek"/>
+            <CheckBox text="Środa"/>
+            <CheckBox text="Czwartek"/>
+            <CheckBox text="Piątek"/>
+            <CheckBox text="Sobota"/>
+            <CheckBox text="Niedziela"/>
+        </FlowPane>
+    </VBox>
+
+    <VBox spacing="5" alignment="CENTER_LEFT">
+        <Label text="Notatki:"/>
+        <TextArea fx:id="notesArea" prefRowCount="4" prefWidth="300"/>
+    </VBox>
+
+    <HBox spacing="15" alignment="CENTER">
+        <Button fx:id="saveButton" text="Zapisz" onAction="#handleSave"/>
+        <Button fx:id="cancelButton" text="Anuluj" onAction="#handleCancel"/>
+    </HBox>
+
+</VBox>
+    </HBox>
