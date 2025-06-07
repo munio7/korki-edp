@@ -11,4 +11,7 @@ public class StudentsController {
     }
 
 
+    public void openAddStudentModal(ActionEvent event) {
+        SceneSwitcherService.loadMainPanel("/newRelationView.fxml");
+    }
 }

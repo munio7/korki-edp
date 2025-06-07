@@ -14,12 +14,12 @@
         <padding>
             <Insets bottom="40" left="40" right="40" top="40" />
         </padding>
-        <Button text="Powrót"
-                onAction="#handleGoBack"
-                maxWidth="200"
-                style="-fx-background-color: #95a5a6; -fx-text-fill: white;"
-        />
-        <fx:include source="/studentsTableComponent.fxml" />
+        <HBox>
+            <Button text="Powrót" onAction="#handleGoBack" maxWidth="200" style="-fx-background-color: #95a5a6; -fx-text-fill: white;" />
+            <Button text="Nawiąż nową relację" onAction="#openAddStudentModal" maxWidth="200" style="-fx-background-color: #27ae60; -fx-text-fill: white;" />
+        </HBox>
+
+        <fx:include source="/tutorsStudentsTableComponent.fxml" />
 
 
     </VBox>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.korkiedp.controller.AddStudentModalController"
+      spacing="15" alignment="CENTER" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8;">
+
+    <Label text="Dodaj nowego ucznia" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+
+    <TextField fx:id="studentNameField" promptText="Imię i nazwisko ucznia" prefWidth="250" />
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Dodaj" onAction="#handleAddStudent" style="-fx-background-color: #27ae60; -fx-text-fill: white;" />
+        <Button text="Anuluj" onAction="#handleCancel" style="-fx-background-color: #c0392b; -fx-text-fill: white;" />
+    </HBox>
+</VBox>
