@@ -6,6 +6,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.korkiedp.component.InfoMessageController;
+import org.example.korkiedp.events.EventBus;
+import org.example.korkiedp.events.ShowMessageEvent;
 
 public class MessagePopupManager {
 
@@ -38,4 +40,8 @@ public class MessagePopupManager {
             e.printStackTrace();
         }
     }
+    public static void sendPopup(String message ,InfoMessageController.MessageType type) {
+        EventBus.publish(new ShowMessageEvent(message, type));
+    }
+
 }
