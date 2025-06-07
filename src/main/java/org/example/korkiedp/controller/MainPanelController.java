@@ -1,14 +1,18 @@
 package org.example.korkiedp.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Parent;
 import org.example.korkiedp.model.Tutor;
+import org.example.korkiedp.service.SceneSwitcherService;
+import org.example.korkiedp.service.TutorAuthService;
 import org.example.korkiedp.session.CurrentSession;
 
 import static org.example.korkiedp.service.SceneSwitcherService.loadView;
+import static org.example.korkiedp.service.SceneSwitcherService.switchScene;
 
 public class MainPanelController {
 
@@ -43,6 +47,13 @@ public class MainPanelController {
     @FXML
     public void showSettingsView() {
         loadView("/settings_view.fxml",mainContent);
+    }
+
+    @FXML
+    public void logout(ActionEvent event) {
+        TutorAuthService.logout();
+        SceneSwitcherService.switchScene(event,"/welcome.fxml");
+
     }
 
 
