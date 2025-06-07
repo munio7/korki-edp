@@ -59,6 +59,6 @@ public class RegisterControler {
 
     @FXML
     private void handleBackToWelcome(ActionEvent event) {
-        SceneSwitcherService.switchScene(event, "/welcome.fxml", "Welcome");
+        SceneSwitcherService.switchScene("/welcome.fxml", "Welcome");
     }
 }

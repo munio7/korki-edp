@@ -52,7 +52,7 @@ public class MainPanelController {
     @FXML
     public void logout(ActionEvent event) {
         TutorAuthService.logout();
-        SceneSwitcherService.switchScene(event,"/welcome.fxml");
+        SceneSwitcherService.switchScene("/welcome.fxml");
 
     }
 

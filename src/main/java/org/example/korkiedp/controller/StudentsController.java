@@ -7,7 +7,7 @@ public class StudentsController {
 
 
     public void handleGoBack(ActionEvent event) {
-        SceneSwitcherService.switchScene(event, "/main_panel.fxml");
+        SceneSwitcherService.switchScene("/main_panel.fxml");
     }
 
 

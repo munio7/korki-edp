@@ -15,20 +15,20 @@ public class WelcomeController {
     public Button loginButton;
     public Button registerButton;
 
-    public void handleLogin(ActionEvent event) {
+    public void handleLogin() {
         if (ConfigProvider.isSet("remember.login") && ConfigProvider.isSet("remember.password")) {
             TutorAuthService.login((String) ConfigProvider.get("remember.login"),(String) ConfigProvider.get("remember.password"),false);
             loadScene(event, "/main_panel.fxml");
         }
         else
-            loadScene(event,"/login.fxml");
+            loadScene("/login.fxml");
     }
 
-    public void handleRegister(ActionEvent event) {
-        loadScene(event,"/signup.fxml");
+    public void handleRegister() {
+        loadScene("/signup.fxml");
     }
 
-    private void loadScene(ActionEvent sourceEvent, String fxmlPath) {
-        SceneSwitcherService.switchScene(sourceEvent,fxmlPath);
+    private void loadScene(String fxmlPath) {
+        SceneSwitcherService.switchScene(fxmlPath);
     }
 }

@@ -5,6 +5,6 @@ import org.example.korkiedp.service.SceneSwitcherService;
 
 public class CalendarController {
     public void handleGoBack(ActionEvent event) {
-        SceneSwitcherService.switchScene(event, "/main_panel.fxml");
+        SceneSwitcherService.switchScene("/main_panel.fxml");
     }
 }

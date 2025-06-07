@@ -20,7 +20,7 @@ public class HelloApplication extends Application {
 
         // subskrybuje globalnie do popups
         EventBus.subscribe(ShowMessageEvent.class, event -> {
-            MessagePopupManager.show(MainStageHolder.get(), event.getMessage(), event.getType(), event.getDuration());
+            MessagePopupManager.show(event.getMessage(), event.getType());
         });
 
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/welcome.fxml"));
