@@ -1,38 +1,41 @@
 package org.example.korkiedp.session;
 
 import javafx.animation.PauseTransition;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Popup;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.korkiedp.component.InfoMessageController;
+import org.example.korkiedp.session.MainStageHolder;
 
 public class MessagePopupManager {
 
-    public static void show(Stage ownerStage, String message, InfoMessageController.MessageType type, Duration duration) {
-        Platform.runLater(() -> {
-            try {
-                FXMLLoader loader = new FXMLLoader(MessagePopupManager.class.getResource("/InfoMessage.fxml"));
-                Parent root = loader.load();
-                InfoMessageController controller = loader.getController();
-                controller.setMessage(message, type);
+    public static void show(String message, InfoMessageController.MessageType type) {
+        try {
+            System.out.println("Showing message: " + message);
+            FXMLLoader loader = new FXMLLoader(MessagePopupManager.class.getResource("/InfoMessage.fxml"));
+            AnchorPane messagePane = loader.load();
 
-                Popup popup = new Popup();
-                popup.getContent().add(root);
-                popup.setAutoHide(true);
-                popup.show(ownerStage);
+            InfoMessageController controller = loader.getController();
+            controller.setMessage(message, type);
 
-                PauseTransition delay = new PauseTransition(duration);
-                delay.setOnFinished(e -> popup.hide());
-                delay.play();
+            // Center horizontally, top = 50px
+            Stage stage = MainStageHolder.get();
+            double x = (stage.getWidth() - messagePane.getPrefWidth()) / 2;
+            messagePane.setLayoutX(x);
+            messagePane.setLayoutY(50);
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+            Pane root = (Pane) stage.getScene().getRoot();
+            root.getChildren().add(messagePane);
+
+            // Auto-dismiss
+            PauseTransition delay = new PauseTransition(Duration.seconds(3));
+            delay.setOnFinished(e -> root.getChildren().remove(messagePane));
+            delay.play();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
