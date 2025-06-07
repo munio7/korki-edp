@@ -13,3 +13,14 @@
 .label {
     -fx-font-size: 13px;
 }
+.nav-button {
+    -fx-background-color: #34495e;
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
+}
+
+.nav-button:selected,
+.nav-button.active {
+    -fx-background-color: #1abc9c;
+    -fx-text-fill: white;
+}

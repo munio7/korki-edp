@@ -9,17 +9,17 @@
     <left>
         <VBox fx:id="navBar" spacing="10" alignment="TOP_CENTER" prefWidth="200" style="-fx-background-color: #2c3e50; -fx-padding: 15;">
             <Label fx:id="welcomeLabel" style="-fx-wrap-text: true;  -fx-text-fill: white; -fx-font-size: 18;" />
-            <Button text="Students" prefWidth="150" onAction="#showStudentsView"/>
-            <Button text="Calendar" prefWidth="150" onAction="#showCalendarView"/>
-            <Button text="Payments" prefWidth="150" onAction="#showPaymentsView"/>
-            <Button text="Settings" prefWidth="150" onAction="#showSettingsView"/>
-            <Button text="Wyloguj"  prefWidth="150" onAction="#logout"/>
+            <Button fx:id="studentsViewBtn" text="Uczniowie" styleClass="nav-button" prefWidth="150" onAction="#showStudentsView"/>
+            <Button fx:id="calendarViewBtn" text="Kalendarz" styleClass="nav-button" prefWidth="150" onAction="#showCalendarView"/>
+            <Button fx:id="paymentsViewBtn" text="Płatności" styleClass="nav-button" prefWidth="150" onAction="#showPaymentsView"/>
+            <Button fx:id="settingsViewBtn" text="Ustawienia" styleClass="nav-button" prefWidth="150" onAction="#showSettingsView"/>
+            <Button fx:id="logoutViewBtn" text="Wyloguj"  prefWidth="150" onAction="#logout"/>
         </VBox>
     </left>
 
     <!-- Center: Main View Area -->
     <center>
-        <StackPane fx:id="mainContent" style="-fx-background-color: #ecf0f1;" />
+        <StackPane fx:id="mainContent" style="-fx-background-color: linear-gradient(to bottom right, #3b5998, #192f6a);" />
     </center>
 
 </BorderPane>
