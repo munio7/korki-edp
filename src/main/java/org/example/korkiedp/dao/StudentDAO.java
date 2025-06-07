@@ -73,6 +73,27 @@ public class StudentDAO {
         }
         return students;
     }
+    public static ArrayList<Student> findAllNotInRelationWithTutorId(int tutorId) {
+        String sql = "SELECT * FROM students where students.id not in (select student_id from tutor_student where tutor_student.tutor_id = ?)";
+        ArrayList<Student> students = new ArrayList<>();
+
+        try(Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, tutorId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                students.add(new Student(rs.getInt("id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("localization"),
+                        rs.getString("tel_number")
+                ));
+            }
+
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+        return students;
+    }
 
     public static void delete(int id) {
         String sql = "DELETE FROM students WHERE id = ?";

@@ -14,11 +14,11 @@
         <padding>
             <Insets bottom="40" left="40" right="40" top="40" />
         </padding>
-        <HBox>
+        <HBox spacing="10" alignment="CENTER">
             <Button text="Powrót" onAction="#handleGoBack" maxWidth="200" style="-fx-background-color: #95a5a6; -fx-text-fill: white;" />
             <Button text="Nawiąż nową relację" onAction="#openAddStudentModal" maxWidth="200" style="-fx-background-color: #27ae60; -fx-text-fill: white;" />
         </HBox>
-
+        <Label text="Twoi uczniowie" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
         <fx:include source="/tutorsStudentsTableComponent.fxml" />
 
 

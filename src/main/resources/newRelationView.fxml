@@ -4,10 +4,24 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.example.korkiedp.controller.AddStudentModalController"
-      spacing="15" alignment="CENTER" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8;">
+      spacing="15" alignment="CENTER"
+      style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8;"
+      maxHeight="-Infinity" maxWidth="-Infinity">
+    <Button text="Powrót" onAction="#handleGoBack" maxWidth="200" style="-fx-background-color: #95a5a6; -fx-text-fill: white;" />
+    <Label text="Wszyscy uczniowie" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+
+    <TableView fx:id="studentsTable" prefHeight="250" prefWidth="540">
+        <columns>
+            <TableColumn fx:id="firstNameCol" text="Imię" prefWidth="120"/>
+            <TableColumn fx:id="lastNameCol" text="Nazwisko" prefWidth="120"/>
+            <TableColumn fx:id="locationCol" text="Lokalizacja" prefWidth="160"/>
+            <TableColumn fx:id="phoneCol" text="Telefon" prefWidth="140"/>
+        </columns>
+    </TableView>
 
     <Label text="Dodaj nowego ucznia" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
 

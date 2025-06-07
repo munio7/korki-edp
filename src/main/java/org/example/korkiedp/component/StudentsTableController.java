@@ -7,9 +7,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.example.korkiedp.async.DbWorker;
 import org.example.korkiedp.dao.TutorStudentDAO;
 import org.example.korkiedp.events.EditStudentEvent;
 import org.example.korkiedp.events.EventBus;
+import org.example.korkiedp.events.allTutorsStudentsFoundEvent;
 import org.example.korkiedp.model.Student;
 import org.example.korkiedp.model.TutorStudent;
 import org.example.korkiedp.session.CurrentSession;
@@ -35,9 +37,10 @@ public class StudentsTableController {
     @FXML
     public void initialize() {
 
+        EventBus.subscribe(allTutorsStudentsFoundEvent.class, (event) -> allTutorsStudentsFound(event));
+
         studentsTable.setOnMouseClicked(event -> {
-            if (studentsTable.getSelectionModel().getSelectedItem() != null) {
-                System.out.println("Wszedłem");
+            if (event.getClickCount() == 2 && studentsTable.getSelectionModel().getSelectedItem() != null) {
                 TutorStudent selectedStudent = studentsTable.getSelectionModel().getSelectedItem();
                 EventBus.publish(new EditStudentEvent(selectedStudent));
             }
@@ -54,10 +57,17 @@ public class StudentsTableController {
             return new SimpleStringProperty(isActive ? "Aktywna" : "Nieaktywna");
         });
 
+
+        DbWorker.submit(()->{
+            List<TutorStudent> fromDb = TutorStudentDAO.findByTutorId(CurrentSession.getTutorId());
+            EventBus.publish(new allTutorsStudentsFoundEvent(fromDb));
+        });
+
+
+    }
+
+    private void allTutorsStudentsFound(allTutorsStudentsFoundEvent event ) {
         studentsTable.setItems(tutorStudentList);
-
-        List<TutorStudent> fromDb = TutorStudentDAO.findByTutorId(CurrentSession.getTutorId());
-        tutorStudentList.setAll(fromDb);
-
+        tutorStudentList.setAll(event.getFromDb());
     }
 }
