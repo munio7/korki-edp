@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import jdk.jfr.Event;
+import org.example.korkiedp.session.MainStageHolder;
 
 
 import java.io.IOException;
@@ -15,10 +16,10 @@ import java.util.Objects;
 
 public class SceneSwitcherService {
 
-    public static void switchScene(ActionEvent sourceEvent, String fxmlPath, String title) {
+    public static void switchScene(String fxmlPath, String title) {
         try {
             Parent root = FXMLLoader.load(Objects.requireNonNull(SceneSwitcherService.class.getResource(fxmlPath)));
-            Scene currentScene = (Scene) ((Node) sourceEvent.getSource()).getScene();
+            Scene currentScene = MainStageHolder.get().getScene();
             currentScene.setRoot(root);
 
         } catch (IOException e) {
@@ -27,8 +28,8 @@ public class SceneSwitcherService {
         }
     }
 
-    public static void switchScene(ActionEvent sourceEvent, String fxmlPath) {
-        switchScene(sourceEvent, fxmlPath, null);
+    public static void switchScene(String fxmlPath) {
+        switchScene(fxmlPath, null);
     }
 
     public static void loadView(String fxmlPath, Pane container) {
