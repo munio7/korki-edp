@@ -31,23 +31,24 @@ public class StudentDAO {
         return student;
     }
 
-    public static void save(Student student) {
-        String sql = "INSERT INTO students(first_name,last_name,localization,tel_number) VALUES(?,?,?,?)";
+    public static boolean save(Student student) {
+        String sql = "INSERT INTO students(first_name,last_name,localization,tel_number) VALUES(?,?,?,?) RETURNING id";
         try(Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, student.getFirstName());
             stmt.setString(2, student.getLastName());
             stmt.setString(3, student.getLocalization());
             stmt.setString(4, student.getTelNumber());
 
-            stmt.executeUpdate();
-            ResultSet rs = stmt.getGeneratedKeys();
+            ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
                 student.setId(rs.getInt(1));
+                return true;
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        return false;
     }
 
     public static ArrayList<Student> findAll() {

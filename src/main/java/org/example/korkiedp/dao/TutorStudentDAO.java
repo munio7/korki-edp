@@ -81,11 +81,12 @@ public class TutorStudentDAO {
         return assigned_tutors;
     }
 
-    public static void save(TutorStudent tutor_student) {
+    public static boolean save(TutorStudent tutor_student) {
         String sql = "INSERT INTO tutor_student(" +
                 "tutor_id, " +
                 "student_id," +
                 "start_date," +
+                "active," +
                 "default_price," +
                 "preferred_days," +
                 "preferred_hours," +
@@ -106,9 +107,11 @@ public class TutorStudentDAO {
 
             if (rowsAffected > 0) {
                 System.out.println("Successfully saved new tutor_student");
+                return true;
             }
             else{
                 System.out.println("Failed to save new tutor_student");
+                return false;
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

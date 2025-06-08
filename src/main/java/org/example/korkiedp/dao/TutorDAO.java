@@ -49,7 +49,7 @@ public class TutorDAO {
 
     public static Tutor save(Tutor tutor) {
         String sql = "INSERT INTO tutors(username, password_hash, full_name, email) VALUES(?, ?, ?, ?)";
-        try(Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try(Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, tutor.getUsername());
             stmt.setString(2, tutor.getPasswordHash());
             stmt.setString(3, tutor.getFullName());
