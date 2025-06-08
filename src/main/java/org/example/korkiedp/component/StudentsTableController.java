@@ -12,11 +12,9 @@ import org.example.korkiedp.dao.TutorStudentDAO;
 import org.example.korkiedp.events.EditStudentEvent;
 import org.example.korkiedp.events.EventBus;
 import org.example.korkiedp.events.allTutorsStudentsFoundEvent;
-import org.example.korkiedp.model.Student;
 import org.example.korkiedp.model.TutorStudent;
 import org.example.korkiedp.session.CurrentSession;
 
-import java.awt.desktop.SystemEventListener;
 import java.util.List;
 
 public class StudentsTableController {
@@ -26,7 +24,7 @@ public class StudentsTableController {
     @FXML
     private TableColumn<TutorStudent, String> nameColumn;
     @FXML
-    private TableColumn<TutorStudent, String> levelColumn;
+    private TableColumn<TutorStudent, String> classColumn;
     @FXML
     public TableColumn<TutorStudent, String> priceColumn;
     @FXML
@@ -47,8 +45,8 @@ public class StudentsTableController {
         });
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("default_name"));
-        levelColumn.setCellValueFactory(cellData -> {
-            String level = cellData.getValue().getLevel();
+        classColumn.setCellValueFactory(cellData -> {
+            String level = cellData.getValue().getclassName();
             return new SimpleStringProperty((level == "" || level == null) ? "Brak" : level);
         });
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("default_price"));

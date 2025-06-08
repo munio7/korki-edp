@@ -12,7 +12,7 @@ public class TutorStudent {
     private BigDecimal default_price;
     private String preferred_days;
     private String preferred_hours;
-    private String level;
+    private String className;
     private String notes;
     private LocalDateTime created_at;
     private LocalDateTime last_contacted_at;
@@ -22,7 +22,7 @@ public class TutorStudent {
     public TutorStudent() {}
 
     // Full
-    public TutorStudent(int tutorId, int studentId, LocalDate start_date, boolean active, BigDecimal default_price, String preferred_days, String preferred_hours, String level, String notes, LocalDateTime last_contacted_at,LocalDateTime created_at,String default_name) {
+    public TutorStudent(int tutorId, int studentId, LocalDate start_date, boolean active, BigDecimal default_price, String preferred_days, String preferred_hours, String className, String notes, LocalDateTime last_contacted_at,LocalDateTime created_at,String default_name) {
         this.tutorId = tutorId;
         this.studentId = studentId;
         this.start_date = start_date;
@@ -30,7 +30,7 @@ public class TutorStudent {
         this.default_price = default_price;
         this.preferred_days = preferred_days;
         this.preferred_hours = preferred_hours;
-        this.level = level;
+        this.className = className;
         this.notes = notes;
         this.created_at = created_at;
         this.last_contacted_at = last_contacted_at;
@@ -45,14 +45,14 @@ public class TutorStudent {
         this.default_price = BigDecimal.ZERO;
         this.preferred_days = "";
         this.preferred_hours = "";
-        this.level = "";
+        this.className = "";
         this.notes = "";
         this.created_at = LocalDateTime.now();
         this.last_contacted_at = null;
 
 
     }
-    public TutorStudent(int tutorId, int studentId, boolean active, BigDecimal default_price, String preferred_days, String preferred_hours, String level, String notes) {
+    public TutorStudent(int tutorId, int studentId, boolean active, BigDecimal default_price, String preferred_days, String preferred_hours, String className, String notes) {
         this.tutorId = tutorId;
         this.studentId = studentId;
         this.active = true;
@@ -60,24 +60,10 @@ public class TutorStudent {
         this.default_price = BigDecimal.ZERO;
         this.preferred_days = "";
         this.preferred_hours = "";
-        this.level = "";
+        this.className = "";
         this.notes = "";
         this.created_at = LocalDateTime.now();
         this.last_contacted_at = null;
-
-        this.tutorId = tutorId;
-        this.studentId = studentId;
-        this.active = true;
-        this.start_date = LocalDate.now();
-        this.default_price = BigDecimal.ZERO;
-        this.preferred_days = "";
-        this.preferred_hours = "";
-        this.level = "";
-        this.notes = "";
-        this.created_at = LocalDateTime.now();
-        this.last_contacted_at = null;
-
-
     }
 
     public int getTutorId() {
@@ -136,12 +122,12 @@ public class TutorStudent {
         this.preferred_hours = preferred_hours;
     }
 
-    public String getLevel() {
-        return level;
+    public String getclassName() {
+        return className;
     }
 
-    public void setLevel(String level) {
-        this.level = level;
+    public void setClassName(String className) {
+        this.className = className;
     }
 
     public String getNotes() {

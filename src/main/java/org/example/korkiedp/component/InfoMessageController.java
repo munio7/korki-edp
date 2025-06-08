@@ -23,10 +23,6 @@ public class InfoMessageController {
         });
     }
 
-    public AnchorPane getRootPane() {
-        return rootPane;
-    }
-
     public enum MessageType {
         SUCCESS, ERROR
     }

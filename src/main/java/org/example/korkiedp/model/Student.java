@@ -11,9 +11,11 @@ public class Student {
     public Student() {}
 
     // Register
-    public Student(String firsName, String lastName) {
+    public Student(String firsName, String lastName,String localization, String telNumber) {
         this.firstName = firsName;
         this.lastName = lastName;
+        this.localization = localization;
+        this.telNumber = telNumber;
     }
 
     // Full

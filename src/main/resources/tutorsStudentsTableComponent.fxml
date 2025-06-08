@@ -9,7 +9,7 @@
     <TableView fx:id="studentsTable" maxHeight="-Infinity" maxWidth="-Infinity">
         <columns>
             <TableColumn fx:id="nameColumn" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Uczeń" />
-            <TableColumn fx:id="levelColumn" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Poziom" />
+            <TableColumn fx:id="classColumn" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Klasa" />
             <TableColumn fx:id="priceColumn" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Cena" />
             <TableColumn fx:id="activeColumn" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Relacja" />
         </columns>

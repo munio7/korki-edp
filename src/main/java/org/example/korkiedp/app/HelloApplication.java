@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import org.example.korkiedp.async.DbWorker;
 import org.example.korkiedp.events.EditStudentEvent;
 import org.example.korkiedp.events.EventBus;
 import org.example.korkiedp.events.ShowMessageEvent;
@@ -23,6 +24,11 @@ public class HelloApplication extends Application {
             Platform.runLater(() -> {
                 MessagePopupManager.show(event.getMessage(), event.getType());
             });
+        });
+
+        // stop thread pool after close
+        stage.setOnCloseRequest(event -> {
+            DbWorker.shutdown();
         });
 
 

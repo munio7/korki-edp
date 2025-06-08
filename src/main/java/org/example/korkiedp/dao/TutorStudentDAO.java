@@ -89,17 +89,18 @@ public class TutorStudentDAO {
                 "default_price," +
                 "preferred_days," +
                 "preferred_hours," +
-                "level," +
-                "notes) VALUES(?, ?, ?, ?,?,?,?,?)";
+                "class," +
+                "notes) VALUES(?, ?, ?, ?,?,?,?,?,?)";
         try(Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, tutor_student.getTutorId());
             stmt.setInt(2, tutor_student.getStudentId());
             stmt.setDate(3, Date.valueOf(tutor_student.getStartDate()));
-            stmt.setBigDecimal(4, tutor_student.getDefault_price());
-            stmt.setString(5, tutor_student.getPreferredDays());
-            stmt.setString(6, tutor_student.getPreferredHours());
-            stmt.setString(7, tutor_student.getLevel());
-            stmt.setString(8, tutor_student.getNotes());
+            stmt.setBoolean(4, tutor_student.getActive());
+            stmt.setBigDecimal(5, tutor_student.getDefault_price());
+            stmt.setString(6, tutor_student.getPreferredDays());
+            stmt.setString(7, tutor_student.getPreferredHours());
+            stmt.setString(8, tutor_student.getclassName());
+            stmt.setString(9, tutor_student.getNotes());
 
             int rowsAffected = stmt.executeUpdate();
 
@@ -205,7 +206,7 @@ public class TutorStudentDAO {
             default_price = ?, 
             preferred_days = ?, 
             preferred_hours = ?, 
-            level = ?, 
+            class = ?, 
             notes = ?, 
             last_contacted_at = ?, 
             created_at = ?, 
@@ -219,7 +220,7 @@ public class TutorStudentDAO {
             stmt.setBigDecimal(3, tutorStudent.getDefault_price());
             stmt.setString(4, tutorStudent.getPreferredDays());
             stmt.setString(5, tutorStudent.getPreferredHours());
-            stmt.setString(6, tutorStudent.getLevel());
+            stmt.setString(6, tutorStudent.getclassName());
             stmt.setString(7, tutorStudent.getNotes());
             stmt.setTimestamp(8, tutorStudent.getLastContactedAt() != null ? Timestamp.valueOf(tutorStudent.getLastContactedAt()) : null);
             stmt.setTimestamp(9, tutorStudent.getCreated_at() != null ? Timestamp.valueOf(tutorStudent.getCreated_at()) : null);
@@ -297,10 +298,10 @@ public class TutorStudentDAO {
             return false;
         }
     }
-    public static boolean updateLevel(int tutorId, int studentId, String level) {
-        String sql = "UPDATE tutor_student SET level = ? WHERE tutor_id = ? AND student_id = ?";
+    public static boolean updateClass(int tutorId, int studentId, String className) {
+        String sql = "UPDATE tutor_student SET class = ? WHERE tutor_id = ? AND student_id = ?";
         try (PreparedStatement stmt = Database.getConnection().prepareStatement(sql)) {
-            stmt.setString(1, level);
+            stmt.setString(1, className);
             stmt.setInt(2, tutorId);
             stmt.setInt(3, studentId);
             return stmt.executeUpdate() > 0;

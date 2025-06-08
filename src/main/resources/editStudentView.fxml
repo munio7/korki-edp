@@ -26,8 +26,8 @@
     </HBox>
 
     <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="Poziom:"/>
-        <TextField fx:id="levelField" prefWidth="200"/>
+        <Label text="Klasa:"/>
+        <TextField fx:id="classField" prefWidth="200"/>
     </HBox>
 
     <HBox spacing="10" alignment="CENTER_LEFT">

@@ -1,16 +1,12 @@
 package org.example.korkiedp.controller;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
-import javafx.stage.Stage;
 import org.example.korkiedp.async.DbWorker;
 import org.example.korkiedp.component.InfoMessageController;
 import org.example.korkiedp.dao.TutorStudentDAO;
-import org.example.korkiedp.events.EditStudentEvent;
 import org.example.korkiedp.events.EventBus;
-import org.example.korkiedp.events.ShowMessageEvent;
 import org.example.korkiedp.events.StudentEditedEvent;
 import org.example.korkiedp.model.TutorStudent;
 import org.example.korkiedp.service.SceneSwitcherService;
@@ -23,13 +19,11 @@ import static org.example.korkiedp.app.MessagePopupManager.sendPopup;
 public class EditStudentController {
 
     @FXML private TextField nameField;
-    @FXML private TextField levelField;
+    @FXML private TextField classField;
     @FXML private TextField priceField;
     @FXML private CheckBox activeCheckbox;
     @FXML private FlowPane daysPane;
     @FXML private TextArea notesArea;
-    @FXML private Button saveButton;
-    @FXML private Button cancelButton;
 
     private TutorStudent tutorStudent;
 
@@ -41,7 +35,7 @@ public class EditStudentController {
     public void setData(TutorStudent ts) {
         this.tutorStudent = ts;
         nameField.setText(ts.getDefault_name());
-        levelField.setText(ts.getLevel());
+        classField.setText(ts.getclassName());
         priceField.setText(ts.getDefault_price() != null ? ts.getDefault_price().toString() : "");
         activeCheckbox.setSelected(ts.getActive());
         notesArea.setText(ts.getNotes());
@@ -57,7 +51,7 @@ public class EditStudentController {
     @FXML
     private void handleSave() {
         tutorStudent.setDefault_name(nameField.getText());
-        tutorStudent.setLevel(levelField.getText());
+        tutorStudent.setClassName(classField.getText());
         try {
             tutorStudent.setDefault_price(new BigDecimal(priceField.getText()));
         } catch (NumberFormatException e) {
