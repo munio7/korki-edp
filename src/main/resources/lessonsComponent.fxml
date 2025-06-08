@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<VBox spacing="10" alignment="CENTER" fx:controller="org.example.korkiedp.component.LessonsComponent" xmlns:fx="http://javafx.com/fxml" style="-fx-background-color: rgba(255,255,255,0.95); -fx-background-radius: 10">
+    <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
+    <Label text="Lekcje tego dnia:" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+    <TableView fx:id="lessonsTable" prefWidth="600" prefHeight="400">
+        <columns>
+            <TableColumn fx:id="timeColumn" text="Godzina" prefWidth="80"/>
+            <TableColumn fx:id="studentColumn" text="Uczeń" prefWidth="150"/>
+            <TableColumn fx:id="topicColumn" text="Temat" prefWidth="200"/>
+            <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
+        </columns>
+    </TableView>
+</VBox>
+
