@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import org.example.korkiedp.events.EditStudentEvent;
 import org.example.korkiedp.events.EventBus;
+import org.example.korkiedp.events.newRelationEvent;
 import org.example.korkiedp.model.Tutor;
 import org.example.korkiedp.service.SceneSwitcherService;
 import org.example.korkiedp.service.TutorAuthService;
@@ -48,6 +49,13 @@ public class MainPanelController {
             Platform.runLater(() -> {
                 SceneSwitcherService.loadMainPanel("/editStudentView.fxml", (EditStudentController c) -> {
                     c.setData(event.getTutorStudent());
+                });
+            });
+        });
+        EventBus.subscribe(newRelationEvent.class, event -> {
+            Platform.runLater(() -> {
+                SceneSwitcherService.loadMainPanel("/setInfoOnNewStudentView.fxml", (SetInfoOnNewStudentController c) -> {
+                    c.setData(event.getStudent());
                 });
             });
         });
