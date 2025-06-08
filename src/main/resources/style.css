@@ -24,3 +24,27 @@
     -fx-background-color: #1abc9c;
     -fx-text-fill: white;
 }
+
+.selected-day {
+    -fx-background-color: #1abc9c;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.today {
+    -fx-background-color: #bfbd0e;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.today-selected {
+    -fx-background-color: linear-gradient(to right, #1abc9c, #bfbd0e) !important;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+
+}
+.button:hover {
+    -fx-opacity: 0.85;
+}
+
+.button:pressed {
+    -fx-opacity: 0.65;
+}

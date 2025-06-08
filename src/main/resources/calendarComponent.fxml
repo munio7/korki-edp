@@ -3,14 +3,22 @@
 <?import javafx.scene.control.*?>
 
 <?import javafx.geometry.Insets?>
-<VBox xmlns="http://javafx.com/javafx/23.0.1"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.example.korkiedp.component.CalendarController"
-      spacing="10" >
-    <padding>
-        <Insets left="10" right="10" bottom="10" top="10" />
-    </padding>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
 
-    <Label fx:id="monthLabel" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
-    <GridPane fx:id="calendarGrid" hgap="5" vgap="5" />
+<VBox alignment="TOP_CENTER" spacing="10" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.korkiedp.component.CalendarController">
+
+    <HBox alignment="CENTER" spacing="20">
+        <Button fx:id="prevButton" text="← Poprzedni" onAction="#handlePrevMonth"/>
+        <Label fx:id="monthLabel" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+        <Button fx:id="nextButton" text="Następny →" onAction="#handleNextMonth"/>
+    </HBox>
+
+    <GridPane fx:id="calendarGrid" hgap="5" vgap="5" alignment="CENTER" />
+
+    <Button text="Dzisiaj" onAction="#handleGoToToday" style="-fx-background-color: #34495e; -fx-text-fill: white;" maxWidth="100"/>
 </VBox>
+

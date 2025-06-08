@@ -1,5 +1,6 @@
 package org.example.korkiedp.component;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
@@ -16,33 +17,39 @@ public class CalendarController {
     @FXML
     private GridPane calendarGrid;
 
-    private YearMonth currentMonth;
+    private LocalDate currentDate;
+
+    private Button selectedDayButton = null;
+
+    @FXML
+    private Button prevButton;
+
+    @FXML
+    private Button nextButton;
+
 
     @FXML
     public void initialize() {
-        currentMonth = YearMonth.now();
-        drawCalendar(currentMonth);
+        currentDate = LocalDate.now(); // Today
+        drawCalendar(currentDate);
     }
 
-    private void drawCalendar(YearMonth month) {
+    private void drawCalendar(LocalDate date) {
         calendarGrid.getChildren().clear();
-        monthLabel.setText(month.getMonth() + " " + month.getYear());
 
-        LocalDate firstDay = month.atDay(1);
-        int startDayOfWeek = firstDay.getDayOfWeek().getValue(); // 1 = Monday
-        int daysInMonth = month.lengthOfMonth();
+        YearMonth yearMonth = YearMonth.from(date);
+        monthLabel.setText(yearMonth.getMonth() + " " + yearMonth.getYear());
+
+        LocalDate firstOfMonth = yearMonth.atDay(1);
+        int startDayOfWeek = firstOfMonth.getDayOfWeek().getValue(); // Monday = 1
+        int daysInMonth = yearMonth.lengthOfMonth();
 
         int row = 0;
         int col = startDayOfWeek - 1;
 
         for (int day = 1; day <= daysInMonth; day++) {
-            Button dayButton = new Button(String.valueOf(day));
-            dayButton.setPrefSize(40, 40);
-
-            int finalDay = day;
-            dayButton.setOnAction(e -> {
-                System.out.println("Clicked day: " + finalDay);
-            });
+            LocalDate dayDate = yearMonth.atDay(day);
+            Button dayButton = createDayButton(dayDate);
 
             calendarGrid.add(dayButton, col, row);
             col++;
@@ -52,4 +59,67 @@ public class CalendarController {
             }
         }
     }
+
+    private Button createDayButton(LocalDate date) {
+        Button dayButton = new Button(String.valueOf(date.getDayOfMonth()));
+        dayButton.setPrefSize(40, 15);
+
+        if (date.equals(LocalDate.now())) {
+            selectedDayButton = dayButton;
+            dayButton.getStyleClass().add("today");
+            dayButton.getStyleClass().add("today-selected");
+        }
+
+        dayButton.setOnAction(e -> {
+            if (selectedDayButton != null) {
+                selectedDayButton.getStyleClass().remove("selected-day");
+                selectedDayButton.getStyleClass().remove("today-selected");
+
+            }
+            selectedDayButton = dayButton;
+            if (!selectedDayButton.getStyleClass().contains("selected-day")) {
+                selectedDayButton.getStyleClass().add("selected-day");
+            }
+            if (selectedDayButton.getStyleClass().contains("selected-day") && selectedDayButton.getStyleClass().contains("today")) {
+                selectedDayButton.getStyleClass().add("today-selected");
+            }
+
+
+            System.out.println("Clicked day: " + date);
+//            loadLessonsForDate(date); // <- NEW
+        });
+
+        return dayButton;
+    }
+
+
+    @FXML
+    private void handlePrevMonth() {
+        currentDate = currentDate.minusMonths(1);
+        drawCalendar(currentDate);
+    }
+
+    @FXML
+    private void handleNextMonth() {
+        currentDate = currentDate.plusMonths(1);
+        drawCalendar(currentDate);
+    }
+
+    @FXML
+    private void handleGoToToday() {
+        if (currentDate.equals(LocalDate.now())) {
+            return;
+        }
+        currentDate = LocalDate.now();
+        drawCalendar(currentDate);
+    }
+
+//    private void loadLessonsForDate(LocalDate date) {
+//        // Example only — replace with actual DAO call
+//        List<Lesson> lessons = LessonDAO.findByTutorAndDate(CurrentSession.getCurrentTutorId(), date);
+//
+//        lessonsTable.getItems().clear();
+//        lessonsTable.getItems().addAll(lessons);
+//    }
+
 }
