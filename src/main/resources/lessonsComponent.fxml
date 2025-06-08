@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.geometry.Insets?>
-<VBox spacing="10" alignment="CENTER" fx:controller="org.example.korkiedp.component.LessonsComponent" xmlns:fx="http://javafx.com/fxml" style="-fx-background-color: rgba(255,255,255,0.95); -fx-background-radius: 10">
+<VBox spacing="10" alignment="CENTER" fx:controller="org.example.korkiedp.component.LessonsComponentController" xmlns:fx="http://javafx.com/fxml" style="-fx-background-color: rgba(255,255,255,0.95); -fx-background-radius: 10">
     <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
     <Label text="Lekcje tego dnia:" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
     <TableView fx:id="lessonsTable" prefWidth="600" prefHeight="400">
