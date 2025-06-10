@@ -45,6 +45,7 @@ public class LessonsComponentController {
     public void initialize() {
         selectedDate = LocalDate.now();
         setDateLabel(selectedDate);
+        getLessonForSelectedDay(selectedDate);
 
         EventBus.subscribe(allTutorsStudentsFoundEvent.class, event -> setTableData());
         EventBus.subscribe(newDateSelectedEvent.class, event -> {
@@ -70,6 +71,13 @@ public class LessonsComponentController {
             selectedDateLabel.getStyleClass().remove("today-text");
         }
         selectedDateLabel.setText("Lekcje dnia: " + date.format(DateTimeFormatter.ofPattern("dd.MM")));
+    }
+
+    private void getLessonForSelectedDay(LocalDate date) {
+        DbWorker.submit( () -> {
+            List<Lesson> fromDb = LessonDAO.findByTutorAndDate(CurrentSession.getTutorId(),date);
+            EventBus.publish(new LessonsForDateFoundEvent(fromDb));
+        });
     }
 
     private void getLessonForSelectedDay(newDateSelectedEvent event) {

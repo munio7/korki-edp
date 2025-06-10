@@ -2,10 +2,12 @@ package org.example.korkiedp.controller;
 
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 import javafx.scene.Node;
+import org.example.korkiedp.app.MessagePopupManager;
 import org.example.korkiedp.component.InfoMessageController;
 import org.example.korkiedp.events.EventBus;
 import org.example.korkiedp.events.ShowMessageEvent;
@@ -37,7 +39,7 @@ public class LoginController {
         Tutor tutor = TutorAuthService.login(username, password, rememberMeCheckBox.isSelected());
 
         if (tutor != null) {
-            EventBus.publish(new ShowMessageEvent("Pomyślnie zalogowano", InfoMessageController.MessageType.SUCCESS));
+            MessagePopupManager.sendPopup("Pomyślnie zalogowano", InfoMessageController.MessageType.SUCCESS);
             SceneSwitcherService.loadContentLayer("/main_panel.fxml");
         } else {
             errorLabel.setText("Nieprawidłowy login lub hasło.");

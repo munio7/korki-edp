@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+
+<HBox spacing="15"  alignment="CENTER" maxWidth="-Infinity" maxHeight="-Infinity" StackPane.alignment="CENTER" xmlns="http://javafx.com/javafx/23.0.1"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="org.example.korkiedp.controller.StartMenuController"
+          style="-fx-padding: 20; -fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 10;">
+    <VBox             spacing="15"
+                      StackPane.alignment="CENTER"
+                      alignment="CENTER"
+                      maxWidth="-Infinity"
+                      maxHeight="-Infinity">
+
+        <TableView fx:id="lessonsTable" prefWidth="600">
+            <TableColumn fx:id="timeColumn" text="Godzina" prefWidth="50"/>
+            <TableColumn fx:id="dateColumn" text="Data" prefWidth="100"/>
+            <TableColumn fx:id="studentColumn" text="Uczeń" prefWidth="150"/>
+            <TableColumn fx:id="topicColumn" text="Przedmiot" prefWidth="200"/>
+            <TableColumn fx:id="priceColumn" text="Należność" prefWidth="100"/>
+        </TableView>
+
+        <VBox fx:id="formBox" spacing="15" alignment="TOP_LEFT" prefWidth="400" style="-fx-padding: 20;">
+            <Label fx:id="formMessageLabel" text="Wybierz lekcję z listy" style="-fx-font-size: 14px; -fx-font-style: italic;"/>
+            <!-- tutaj później dynamicznie umieścisz pola formularza -->
+        </VBox>
+
+        <VBox spacing="15" style="-fx-padding: 15 20 20 20;">
+            <!-- Sekcja informacji -->
+            <HBox spacing="30" alignment="CENTER_LEFT">
+                <Label fx:id="infoLabel1" text="Informacja 1"/>
+                <Label fx:id="infoLabel2" text="Informacja 2"/>
+                <Label fx:id="infoLabel3" text="Informacja 3"/>
+            </HBox>
+
+            <!-- Sekcja przycisków -->
+            <HBox spacing="15" alignment="CENTER_RIGHT">
+                <Button fx:id="actionButton1" text="Akcja 1"/>
+                <Button fx:id="actionButton2" text="Akcja 2"/>
+                <Button fx:id="actionButton3" text="Akcja 3"/>
+            </HBox>
+        </VBox>
+    </VBox>
+</HBox>

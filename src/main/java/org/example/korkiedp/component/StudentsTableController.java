@@ -1,5 +1,6 @@
 package org.example.korkiedp.component;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,7 +36,12 @@ public class StudentsTableController {
     @FXML
     public void initialize() {
 
-        EventBus.subscribe(allTutorsStudentsFoundEvent.class, (event) -> allTutorsStudentsFound(event));
+        EventBus.subscribe(allTutorsStudentsFoundEvent.class, (event) -> Platform.runLater(() -> {
+            for (TutorStudent student : event.getFromDb()) {
+                System.out.println("znalazlem: " + student);
+            }
+                    allTutorsStudentsFound(event);
+        }));
 
         studentsTable.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2 && studentsTable.getSelectionModel().getSelectedItem() != null) {

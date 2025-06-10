@@ -17,6 +17,7 @@ import org.example.korkiedp.app.MainStageHolder;
 
 public class MainPanelController {
 
+    @FXML public Button startMenuViewBtn;
     @FXML private StackPane mainContent;
 
     @FXML
@@ -59,8 +60,13 @@ public class MainPanelController {
         MainStageHolder.setMainPanelPane(mainContent);
         loggedTutor = CurrentSession.getTutor();
         welcomeLabel.setText("Witaj, " + loggedTutor.getFullName() + "!");
+        showStartMenu();
     }
-
+    @FXML
+    public void showStartMenu() {
+        SceneSwitcherService.loadMainPanel("/startMenu.fxml");
+        highlightSelected(startMenuViewBtn);
+    }
     @FXML
     public void showStudentsView() {
         SceneSwitcherService.loadMainPanel("/students.fxml");
