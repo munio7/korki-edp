@@ -20,6 +20,7 @@ import org.example.korkiedp.events.LessonsForDateFoundEvent;
 import org.example.korkiedp.events.allTutorsStudentsFoundEvent;
 import org.example.korkiedp.events.newDateSelectedEvent;
 import org.example.korkiedp.model.Lesson;
+import org.example.korkiedp.model.Tutor;
 import org.example.korkiedp.model.TutorStudent;
 import org.example.korkiedp.service.SceneSwitcherService;
 import org.example.korkiedp.session.CurrentSession;
@@ -31,36 +32,36 @@ import java.util.*;
 
 public class LessonsComponentController {
     public Label selectedDateLabel;
+    @FXML public TableColumn<Lesson, String> subjectColumn;
     @FXML
     private TableView<Lesson> lessonsTable;
     @FXML private TableColumn<Lesson, String> timeColumn;
     @FXML private TableColumn<Lesson, String> studentColumn;
-    @FXML private TableColumn<Lesson, String> topicColumn;
     @FXML private TableColumn<Lesson, String> statusColumn;
     private LocalDate selectedDate;
+    boolean studentsListSet = false;
+
 
     private Map<Integer, String> studentNames;
     private final ObservableList<Lesson> lessonList = FXCollections.observableArrayList();
 
     public void initialize() {
-        selectedDate = LocalDate.now();
-        setDateLabel(selectedDate);
-        getLessonForSelectedDay(selectedDate);
-
-        EventBus.subscribe(allTutorsStudentsFoundEvent.class, event -> setTableData());
-        EventBus.subscribe(newDateSelectedEvent.class, event -> {
-            selectedDate = event.getDate();
-            setDateLabel(selectedDate);
-            getLessonForSelectedDay(event);
+        DbWorker.submit( () -> {
+            getAllStudentNames();
+            Platform.runLater(() -> setTableData());
         });
+
         EventBus.subscribe(LessonsForDateFoundEvent.class, event ->
                 Platform.runLater(() -> refreshTable(event))
         );
-        DbWorker.submit( () -> {
-            getAllStudentNames();
-            EventBus.publish(new allTutorsStudentsFoundEvent(null));
-        });
 
+        EventBus.subscribe(newDateSelectedEvent.class, event -> {
+            if(studentsListSet) {
+                selectedDate = event.getDate();
+                setDateLabel(selectedDate);
+                getLessonForSelectedDay(event);
+            }
+        });
     }
 
     private void setDateLabel(LocalDate date) {
@@ -71,13 +72,6 @@ public class LessonsComponentController {
             selectedDateLabel.getStyleClass().remove("today-text");
         }
         selectedDateLabel.setText("Lekcje dnia: " + date.format(DateTimeFormatter.ofPattern("dd.MM")));
-    }
-
-    private void getLessonForSelectedDay(LocalDate date) {
-        DbWorker.submit( () -> {
-            List<Lesson> fromDb = LessonDAO.findByTutorAndDate(CurrentSession.getTutorId(),date);
-            EventBus.publish(new LessonsForDateFoundEvent(fromDb));
-        });
     }
 
     private void getLessonForSelectedDay(newDateSelectedEvent event) {
@@ -92,6 +86,7 @@ public class LessonsComponentController {
             MessagePopupManager.sendPopup("Brak lekcji na dany dzień", InfoMessageController.MessageType.ERROR);
         }
         lessonList.setAll(event.getLessons());
+        lessonsTable.refresh();
     }
 
     public void setTableData() {
@@ -101,21 +96,24 @@ public class LessonsComponentController {
             String name = studentNames.getOrDefault(studentId, "ID: " + studentId);
             return new SimpleStringProperty(name);
         });
-        topicColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSubject()));
+        subjectColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSubject()));
         statusColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
                 cellData.getValue().isCanceled() ? "Anulowana" :
                         (cellData.getValue().getAttendance() != null && cellData.getValue().getAttendance()) ? "Obecna" : "Zaplanowana"
         ));
 
         lessonsTable.setItems(lessonList);
+        studentsListSet = true;
     }
 
-    public void getAllStudentNames() {
+    public List<TutorStudent> getAllStudentNames() {
+        List<TutorStudent> fromDb = TutorStudentDAO.findByTutorId(CurrentSession.getTutorId());
         Map<Integer, String> map = new HashMap<>();
-        for (TutorStudent ts : TutorStudentDAO.findByTutorId(CurrentSession.getTutorId())) {
+        for (TutorStudent ts : fromDb ) {
             map.put(ts.getStudentId(), ts.getDefault_name());
         }
         setStudentNames(map);
+        return fromDb;
     }
     public void setStudentNames(Map<Integer, String> studentNames) {
         this.studentNames = studentNames;

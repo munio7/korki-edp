@@ -11,7 +11,7 @@
 
             <HBox spacing="20">
                 <fx:include source="/calendarComponent.fxml" />
-                <fx:include source="lessonsComponent.fxml" />
+                <fx:include source="/lessonsComponent.fxml" />
             </HBox>
         </VBox>
    </HBox>

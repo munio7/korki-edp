@@ -160,6 +160,14 @@ public class NewLessonController {
             MessagePopupManager.sendPopup("Wybierz przedmiot!", InfoMessageController.MessageType.ERROR);
             return;
         }
+        if (datePicker.getValue() == null) {
+            MessagePopupManager.sendPopup("Wybierz date!", InfoMessageController.MessageType.ERROR);
+            return;
+        }
+        if (minuteField.getText() == null || minuteField.getText().isBlank() || hourField.getText() == null || hourField.getText().isBlank()) {
+            MessagePopupManager.sendPopup("Wybierz godzinę!", InfoMessageController.MessageType.ERROR);
+            return;
+        }
 
         Lesson lesson = new Lesson(
                 CurrentSession.getTutorId(),

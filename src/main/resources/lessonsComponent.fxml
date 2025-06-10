@@ -15,7 +15,10 @@
     </VBox>
     <TableView fx:id="lessonsTable" prefWidth="600" prefHeight="400">
         <columns>
-
+            <TableColumn fx:id="timeColumn" text="Godzina" prefWidth="80"/>
+            <TableColumn fx:id="studentColumn" text="Uczeń" prefWidth="150"/>
+            <TableColumn fx:id="subjectColumn" text="Przedmiot" prefWidth="200"/>
+            <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
         </columns>
     </TableView>
 </VBox>

@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import org.example.korkiedp.component.LessonsComponentController;
 import org.example.korkiedp.events.EditStudentEvent;
 import org.example.korkiedp.events.EventBus;
 import org.example.korkiedp.events.newRelationEvent;
@@ -47,13 +48,14 @@ public class MainPanelController {
     public void initialize() {
 
         EventBus.subscribe(EditStudentEvent.class, event -> {
-                SceneSwitcherService.loadMainPanel("/editStudentView.fxml", (EditStudentController c) -> {
-                    c.setData(event.getTutorStudent());
+            Platform.runLater(() -> {                SceneSwitcherService.loadMainPanel("/editStudentView.fxml", (EditStudentController c) -> {
+                c.setData(event.getTutorStudent());});
+
             });
         });
         EventBus.subscribe(newRelationEvent.class, event -> {
-                SceneSwitcherService.loadMainPanel("/setInfoOnNewStudentView.fxml", (SetInfoOnNewStudentController c) -> {
-                    c.setData(event.getStudent());
+            Platform.runLater(() -> {SceneSwitcherService.loadMainPanel("/setInfoOnNewStudentView.fxml", (SetInfoOnNewStudentController c) -> {
+                c.setData(event.getStudent());});
             });
         });
 
