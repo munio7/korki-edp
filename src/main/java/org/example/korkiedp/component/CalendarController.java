@@ -1,13 +1,20 @@
 package org.example.korkiedp.component;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import org.example.korkiedp.dao.LessonDAO;
+import org.example.korkiedp.events.EventBus;
+import org.example.korkiedp.events.newDateSelectedEvent;
+import org.example.korkiedp.model.Lesson;
+import org.example.korkiedp.session.CurrentSession;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.List;
 
 public class CalendarController {
 
@@ -20,6 +27,7 @@ public class CalendarController {
     private LocalDate currentDate;
 
     private Button selectedDayButton = null;
+    private Button nowButton = null;
 
     @FXML
     private Button prevButton;
@@ -66,6 +74,7 @@ public class CalendarController {
 
         if (date.equals(LocalDate.now())) {
             selectedDayButton = dayButton;
+            nowButton = dayButton;
             dayButton.getStyleClass().add("today");
             dayButton.getStyleClass().add("today-selected");
         }
@@ -83,10 +92,8 @@ public class CalendarController {
             if (selectedDayButton.getStyleClass().contains("selected-day") && selectedDayButton.getStyleClass().contains("today")) {
                 selectedDayButton.getStyleClass().add("today-selected");
             }
-
-
-            System.out.println("Clicked day: " + date);
-//            loadLessonsForDate(date); // <- NEW
+            currentDate = date;
+            EventBus.publish(new newDateSelectedEvent(date));
         });
 
         return dayButton;
@@ -110,16 +117,9 @@ public class CalendarController {
         if (currentDate.equals(LocalDate.now())) {
             return;
         }
-        currentDate = LocalDate.now();
+        nowButton.fire();
+        EventBus.publish(new newDateSelectedEvent(currentDate));
         drawCalendar(currentDate);
+
     }
-
-//    private void loadLessonsForDate(LocalDate date) {
-//        // Example only — replace with actual DAO call
-//        List<Lesson> lessons = LessonDAO.findByTutorAndDate(CurrentSession.getCurrentTutorId(), date);
-//
-//        lessonsTable.getItems().clear();
-//        lessonsTable.getItems().addAll(lessons);
-//    }
-
 }

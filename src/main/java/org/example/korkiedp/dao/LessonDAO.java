@@ -11,23 +11,23 @@ import java.util.List;
 public class LessonDAO {
 
     public static List<Lesson> findByTutorId(int tutorId) {
-        String sql = "SELECT * FROM lessons WHERE tutor_id = ?";
+        String sql = "SELECT * FROM lesson WHERE tutor_id = ?";
         return fetchLessons(sql, tutorId);
     }
 
     public static List<Lesson> findByTutorAndStudentId(int tutorId, int studentId) {
-        String sql = "SELECT * FROM lessons WHERE tutor_id = ? AND student_id = ?";
+        String sql = "SELECT * FROM lesson WHERE tutor_id = ? AND student_id = ?";
         return fetchLessons(sql, tutorId, studentId);
     }
     public static List<Lesson> findByTutorAndDate(int tutorId, LocalDate date) {
-        String sql = "SELECT * FROM lessons WHERE tutor_id = ? AND date = ?";
+        String sql = "SELECT * FROM lesson WHERE tutor_id = ? AND date = ?";
         return fetchLessons(sql, tutorId, Date.valueOf(date));
     }
 
 
     public static boolean save(Lesson lesson) {
         String sql = """
-            INSERT INTO lessons (tutor_id, student_id, date, start_time, duration_minutes, price,
+            INSERT INTO lesson (tutor_id, student_id, date, start_time, duration_minutes, price,
                                  paid, attendance, canceled, cancel_reason, updated_by,
                                  created_at, modified_at, topic, subject)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -44,14 +44,15 @@ public class LessonDAO {
                 return true;
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.err.println("SQL Error while saving lesson: " + e.getMessage());
+            return false;
         }
         return false;
     }
 
     public static boolean update(Lesson lesson) {
         String sql = """
-            UPDATE lessons SET tutor_id = ?, student_id = ?, date = ?, start_time = ?, duration_minutes = ?, 
+            UPDATE lesson SET tutor_id = ?, student_id = ?, date = ?, start_time = ?, duration_minutes = ?, 
                                price = ?, paid = ?, attendance = ?, canceled = ?, cancel_reason = ?, updated_by = ?, 
                                created_at = ?, modified_at = ?, topic = ?, subject = ?
             WHERE id = ?

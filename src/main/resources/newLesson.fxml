@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox spacing="15"  alignment="CENTER" maxWidth="-Infinity" maxHeight="-Infinity" StackPane.alignment="CENTER" xmlns="http://javafx.com/javafx/23.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example.korkiedp.controller.NewLessonController"
+      style="-fx-padding: 20; -fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 10;">
+    <VBox             spacing="15"
+                      StackPane.alignment="CENTER"
+                      alignment="CENTER"
+                      maxWidth="-Infinity"
+                      maxHeight="-Infinity">
+
+        <Label text="Dodaj Nową Lekcję" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+        <HBox spacing="10">
+            <Label text="Uczeń:" minWidth="120"/>
+            <ComboBox fx:id="studentComboBox" promptText="Wybierz ucznia" prefWidth="200"/>
+        </HBox>
+
+        <HBox spacing="10">
+            <Label text="Data:" minWidth="120"/>
+            <DatePicker fx:id="datePicker"/>
+        </HBox>
+
+        <!-- Start Time Section -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Godzina rozpoczęcia:" minWidth="120"/>
+
+            <!-- Hour Input with Buttons -->
+            <VBox spacing="5" alignment="CENTER">
+                <Button text="+1h" onAction="#incrementHour"/>
+                <TextField fx:id="hourField" promptText="HH" maxWidth="50"/>
+                <Button text="-1h" onAction="#decrementHour"/>
+            </VBox>
+
+            <!-- Minute Input with Buttons -->
+            <VBox spacing="5" alignment="CENTER">
+                <Button text="+15m" onAction="#incrementMinutes"/>
+                <TextField fx:id="minuteField" promptText="MM" maxWidth="50"/>
+                <Button text="-15m" onAction="#decrementMinutes"/>
+            </VBox>
+        </HBox>
+
+        <HBox spacing="10">
+            <Label text="Czas trwania (min):" minWidth="120"/>
+            <TextField fx:id="durationField"/>
+        </HBox>
+
+        <HBox spacing="10">
+            <Label text="Cena:" minWidth="120"/>
+            <TextField fx:id="priceField"/>
+        </HBox>
+
+        <HBox spacing="10">
+            <Label text="Temat:" minWidth="120"/>
+            <TextField fx:id="topicField"/>
+        </HBox>
+
+        <HBox spacing="10">
+            <Label text="Przedmiot:" minWidth="120"/>
+            <ComboBox fx:id="subjectComboBox" promptText="Wybierz przedmiot" prefWidth="200" editable="true"/>
+        </HBox>
+
+        <HBox spacing="15" alignment="CENTER_RIGHT">
+            <Button text="Anuluj" onAction="#handleCancel"/>
+            <Button text="Zapisz" onAction="#handleSave"/>
+        </HBox>
+    </VBox>
+</HBox>

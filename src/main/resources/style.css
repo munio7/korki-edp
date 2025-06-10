@@ -48,3 +48,6 @@
 .button:pressed {
     -fx-opacity: 0.65;
 }
+.today-text{
+    -fx-text-fill: #bfbd0e;
+}

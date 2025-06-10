@@ -23,6 +23,8 @@ public class Lesson {
     private String topic;
     private String subject;
 
+
+
     //Empty
     public Lesson() {}
 
@@ -41,21 +43,20 @@ public class Lesson {
 
     //Full
     public Lesson(int tutorId, int studentId, LocalDate date, LocalTime startTime, int durationMinutes,
-                  BigDecimal price, boolean paid, Boolean attendance, boolean canceled, String cancelReason,
-                  int updatedBy, LocalDateTime createdAt, LocalDateTime modifiedAt, String topic, String subject) {
+                  BigDecimal price,String topic, String subject) {
         this.tutorId = tutorId;
         this.studentId = studentId;
         this.date = date;
         this.startTime = startTime;
         this.durationMinutes = durationMinutes;
         this.price = price;
-        this.paid = paid;
-        this.attendance = attendance;
-        this.canceled = canceled;
-        this.cancelReason = cancelReason;
-        this.updatedBy = updatedBy;
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
+        this.paid = false;
+        this.attendance = false;
+        this.canceled = false;
+        this.cancelReason = "";
+        this.createdAt = LocalDateTime.now();
+        this.modifiedAt = LocalDateTime.now();
+        this.updatedBy = tutorId;
         this.topic = topic;
         this.subject = subject;
     }

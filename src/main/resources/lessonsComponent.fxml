@@ -9,7 +9,10 @@
 <?import javafx.geometry.Insets?>
 <VBox spacing="10" alignment="CENTER" fx:controller="org.example.korkiedp.component.LessonsComponentController" xmlns:fx="http://javafx.com/fxml" style="-fx-background-color: rgba(255,255,255,0.95); -fx-background-radius: 10">
     <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
-    <Label text="Lekcje tego dnia:" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+    <VBox alignment="CENTER" spacing="10">
+        <Label fx:id="selectedDateLabel" text="Lekcje dnia: " style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+        <Button text="Nowa lekcja" onAction="#handleNewLesson" style="-fx-background-color: #27ae60; -fx-text-fill: white;" />
+    </VBox>
     <TableView fx:id="lessonsTable" prefWidth="600" prefHeight="400">
         <columns>
             <TableColumn fx:id="timeColumn" text="Godzina" prefWidth="80"/>

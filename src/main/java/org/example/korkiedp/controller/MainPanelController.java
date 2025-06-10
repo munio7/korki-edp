@@ -46,17 +46,13 @@ public class MainPanelController {
     public void initialize() {
 
         EventBus.subscribe(EditStudentEvent.class, event -> {
-            Platform.runLater(() -> {
                 SceneSwitcherService.loadMainPanel("/editStudentView.fxml", (EditStudentController c) -> {
                     c.setData(event.getTutorStudent());
-                });
             });
         });
         EventBus.subscribe(newRelationEvent.class, event -> {
-            Platform.runLater(() -> {
                 SceneSwitcherService.loadMainPanel("/setInfoOnNewStudentView.fxml", (SetInfoOnNewStudentController c) -> {
                     c.setData(event.getStudent());
-                });
             });
         });
 
