@@ -13,7 +13,7 @@
         <Label fx:id="selectedDateLabel" text="Lekcje dnia: " style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
         <Button text="Nowa lekcja" onAction="#handleNewLesson" style="-fx-background-color: #27ae60; -fx-text-fill: white;" />
     </VBox>
-    <TableView fx:id="lessonsTable" prefWidth="600" prefHeight="400">
+    <TableView fx:id="lessonsTable" prefWidth="530" prefHeight="400">
         <columns>
             <TableColumn fx:id="timeColumn" text="Godzina" prefWidth="80"/>
             <TableColumn fx:id="studentColumn" text="Uczeń" prefWidth="150"/>

@@ -19,6 +19,7 @@ import org.example.korkiedp.service.SceneSwitcherService;
 import org.example.korkiedp.session.CurrentSession;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -169,16 +170,22 @@ public class NewLessonController {
             return;
         }
 
+        BigDecimal hourlyPrice = new BigDecimal(priceField.getText());
+        int durationMinutes = parseInt(durationField.getText());
+        BigDecimal finalPrice = hourlyPrice
+                .multiply(BigDecimal.valueOf(durationMinutes)).divide(BigDecimal.valueOf(60), 2, RoundingMode.HALF_UP);
+
         Lesson lesson = new Lesson(
                 CurrentSession.getTutorId(),
                 studentsName.get(studentComboBox.getValue()).getStudentId(),
                 datePicker.getValue(),
-                LocalTime.of(parseInt(hourField.getText()),parseInt(minuteField.getText())),
-                parseInt(durationField.getText()),
-                BigDecimal.valueOf(parseInt(priceField.getText())),
+                LocalTime.of(parseInt(hourField.getText()), parseInt(minuteField.getText())),
+                durationMinutes,
+                finalPrice,
                 topicField.getText(),
                 subjectComboBox.getValue()
         );
+
         DbWorker.submit( () -> {
             boolean status =  LessonDAO.save(lesson);
             EventBus.publish(new newLessonEvent(status));

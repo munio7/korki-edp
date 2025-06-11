@@ -6,7 +6,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -17,16 +16,13 @@ import org.example.korkiedp.dao.LessonDAO;
 import org.example.korkiedp.dao.TutorStudentDAO;
 import org.example.korkiedp.events.EventBus;
 import org.example.korkiedp.events.LessonsForDateFoundEvent;
-import org.example.korkiedp.events.allTutorsStudentsFoundEvent;
 import org.example.korkiedp.events.newDateSelectedEvent;
 import org.example.korkiedp.model.Lesson;
-import org.example.korkiedp.model.Tutor;
 import org.example.korkiedp.model.TutorStudent;
 import org.example.korkiedp.service.SceneSwitcherService;
 import org.example.korkiedp.session.CurrentSession;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -77,6 +73,7 @@ public class LessonsComponentController {
     private void getLessonForSelectedDay(newDateSelectedEvent event) {
         DbWorker.submit( () -> {
             List<Lesson> fromDb = LessonDAO.findByTutorAndDate(CurrentSession.getTutorId(),event.getDate());
+            fromDb.sort(Comparator.comparing(Lesson::getStartTime));
             EventBus.publish(new LessonsForDateFoundEvent(fromDb));
         });
     }
@@ -106,14 +103,13 @@ public class LessonsComponentController {
         studentsListSet = true;
     }
 
-    public List<TutorStudent> getAllStudentNames() {
+    public void getAllStudentNames() {
         List<TutorStudent> fromDb = TutorStudentDAO.findByTutorId(CurrentSession.getTutorId());
         Map<Integer, String> map = new HashMap<>();
         for (TutorStudent ts : fromDb ) {
             map.put(ts.getStudentId(), ts.getDefault_name());
         }
         setStudentNames(map);
-        return fromDb;
     }
     public void setStudentNames(Map<Integer, String> studentNames) {
         this.studentNames = studentNames;

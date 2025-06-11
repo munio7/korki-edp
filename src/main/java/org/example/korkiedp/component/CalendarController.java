@@ -14,7 +14,9 @@ import org.example.korkiedp.session.CurrentSession;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 public class CalendarController {
 
@@ -46,7 +48,8 @@ public class CalendarController {
         calendarGrid.getChildren().clear();
 
         YearMonth yearMonth = YearMonth.from(date);
-        monthLabel.setText(yearMonth.getMonth() + " " + yearMonth.getYear());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("LLLL yyyy", new Locale("pl"));
+        monthLabel.setText(yearMonth.atDay(1).format(formatter));
 
         LocalDate firstOfMonth = yearMonth.atDay(1);
         int startDayOfWeek = firstOfMonth.getDayOfWeek().getValue(); // Monday = 1
@@ -70,7 +73,7 @@ public class CalendarController {
 
     private Button createDayButton(LocalDate date) {
         Button dayButton = new Button(String.valueOf(date.getDayOfMonth()));
-        dayButton.setPrefSize(40, 15);
+        dayButton.setPrefSize(40, 20);
 
         if (date.equals(LocalDate.now())) {
             selectedDayButton = dayButton;

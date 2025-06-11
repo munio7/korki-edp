@@ -52,7 +52,7 @@
         </HBox>
 
         <HBox spacing="10">
-            <Label text="Cena:" minWidth="120"/>
+            <Label text="Cena (h):" minWidth="120"/>
             <TextField fx:id="priceField"/>
         </HBox>
 

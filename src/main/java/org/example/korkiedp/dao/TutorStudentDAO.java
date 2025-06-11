@@ -349,6 +349,26 @@ public class TutorStudentDAO {
             return false;
         }
     }
+    public static int countActiveStudentsByTutorId(int tutorId) {
+        String sql = "SELECT COUNT(*) FROM tutor_student WHERE tutor_id = ? AND active = true";
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, tutorId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            } else {
+                return 0;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error counting active students for tutor ID " + tutorId, e);
+        }
+    }
 
 
 

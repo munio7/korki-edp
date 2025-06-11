@@ -3,6 +3,7 @@ package org.example.korkiedp.dao;
 import org.example.korkiedp.model.Lesson;
 import org.example.korkiedp.util.Database;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -98,8 +99,8 @@ public class LessonDAO {
         l.setDurationMinutes(rs.getInt("duration_minutes"));
         l.setPrice(rs.getBigDecimal("price"));
         l.setPaid(rs.getBoolean("paid"));
-        l.setAttendance((Boolean) rs.getObject("attendance")); // can be null
-        l.setCanceled(rs.getBoolean("canceled"));
+        l.setAttendance((Boolean) rs.getObject("attendance"));
+        l.setCanceled((Boolean) rs.getObject("canceled"));
         l.setCancelReason(rs.getString("cancel_reason"));
         l.setUpdatedBy(rs.getInt("updated_by"));
         l.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
@@ -117,12 +118,21 @@ public class LessonDAO {
         stmt.setInt(5, l.getDurationMinutes());
         stmt.setBigDecimal(6, l.getPrice());
         stmt.setBoolean(7, l.isPaid());
+
+        // Nullable attendance
         if (l.getAttendance() != null) {
             stmt.setBoolean(8, l.getAttendance());
         } else {
             stmt.setNull(8, Types.BOOLEAN);
         }
-        stmt.setBoolean(9, l.isCanceled());
+
+        // Nullable canceled
+        if (l.isCanceled() != null) {
+            stmt.setBoolean(9, l.isCanceled());
+        } else {
+            stmt.setNull(9, Types.BOOLEAN);
+        }
+
         stmt.setString(10, l.getCancelReason());
         stmt.setInt(11, l.getUpdatedBy());
         stmt.setTimestamp(12, Timestamp.valueOf(l.getCreatedAt()));
@@ -134,4 +144,72 @@ public class LessonDAO {
             stmt.setInt(16, l.getId());
         }
     }
+
+    public static int countFinishedLessons(int tutorId) {
+        String sql = """
+        SELECT COUNT(*) 
+        FROM lesson 
+        WHERE tutor_id = ? 
+          AND (date + start_time + (duration_minutes || ' minutes')::interval) < CURRENT_TIMESTAMP
+            AND canceled IS NOT TRUE
+    """;
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, tutorId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            } else {
+                return 0;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error counting finished lessons for tutor ID " + tutorId, e);
+        }
+    }
+    public static BigDecimal sumFinishedLessonsPrice(int tutorId) {
+        String sql = """
+        SELECT SUM(price) 
+        FROM lesson 
+        WHERE tutor_id = ? 
+          AND (date + start_time + (duration_minutes || ' minutes')::interval) < CURRENT_TIMESTAMP
+          AND canceled IS NOT TRUE
+        And paid IS TRUE
+    """;
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, tutorId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getBigDecimal(1) != null ? rs.getBigDecimal(1) : BigDecimal.ZERO;
+            } else {
+                return BigDecimal.ZERO;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error summing finished lessons price for tutor ID " + tutorId, e);
+        }
+    }
+    public static List<Lesson> findFinishedLessonsByTutorId(int tutorId) {
+        String sql = """
+        SELECT * 
+        FROM lesson 
+        WHERE tutor_id = ? 
+          AND (date + start_time + (duration_minutes || ' minutes')::interval) < CURRENT_TIMESTAMP
+          AND canceled IS NOT TRUE
+          And paid = false
+    """;
+
+        return fetchLessons(sql, tutorId);
+    }
+
+
 }

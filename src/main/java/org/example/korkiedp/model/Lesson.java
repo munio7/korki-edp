@@ -14,8 +14,8 @@ public class Lesson {
     private int durationMinutes;
     private BigDecimal price;
     private boolean paid;
-    private boolean attendance; // can be null if not marked yet
-    private boolean canceled;
+    private Boolean attendance; // can be null if not marked yet
+    private Boolean canceled;
     private String cancelReason;
     private int updatedBy;
     private LocalDateTime createdAt;
@@ -29,21 +29,23 @@ public class Lesson {
     public Lesson() {}
 
     //Register
-    public Lesson(int tutorId, int studentId, LocalDate date, LocalTime startTime){
+    public Lesson(int tutorId, int studentId, LocalDate date, LocalTime startTime,int durationMinutes, BigDecimal price, String topic, String subject) {
         this.tutorId = tutorId;
         this.studentId = studentId;
         this.date = date;
         this.startTime = startTime;
+        this.durationMinutes = durationMinutes;
+        this.topic = topic;
+        this.subject = subject;
+        this.price = price;
         this.paid = false;
-        this.attendance = false;
-        this.canceled = false;
         this.createdAt = LocalDateTime.now();
         this.modifiedAt = LocalDateTime.now();
     }
 
     //Full
     public Lesson(int tutorId, int studentId, LocalDate date, LocalTime startTime, int durationMinutes,
-                  BigDecimal price,String topic, String subject) {
+                  BigDecimal price,Boolean attendance,Boolean canceled ,String topic, String subject) {
         this.tutorId = tutorId;
         this.studentId = studentId;
         this.date = date;
@@ -51,8 +53,8 @@ public class Lesson {
         this.durationMinutes = durationMinutes;
         this.price = price;
         this.paid = false;
-        this.attendance = false;
-        this.canceled = false;
+        this.attendance = attendance;
+        this.canceled = canceled;
         this.cancelReason = "";
         this.createdAt = LocalDateTime.now();
         this.modifiedAt = LocalDateTime.now();
@@ -90,8 +92,8 @@ public class Lesson {
     public Boolean getAttendance() { return attendance; }
     public void setAttendance(Boolean attendance) { this.attendance = attendance; }
 
-    public boolean isCanceled() { return canceled; }
-    public void setCanceled(boolean canceled) { this.canceled = canceled; }
+    public Boolean isCanceled() { return canceled; }
+    public void setCanceled(Boolean canceled) { this.canceled = canceled; }
 
     public String getCancelReason() { return cancelReason; }
     public void setCancelReason(String cancelReason) { this.cancelReason = cancelReason; }
