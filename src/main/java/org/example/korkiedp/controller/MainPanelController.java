@@ -83,7 +83,7 @@ public class MainPanelController {
 
     @FXML
     public void showPaymentsView() {
-        SceneSwitcherService.loadMainPanel("/payments.fxml");
+        SceneSwitcherService.loadMainPanel("/paymentsView.fxml");
         highlightSelected(paymentsViewBtn);
     }
 

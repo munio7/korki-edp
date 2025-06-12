@@ -53,8 +53,10 @@
 
         <HBox spacing="10">
             <Label text="Cena (h):" minWidth="120"/>
-            <TextField fx:id="priceField"/>
+            <TextField fx:id="priceField" prefWidth="100"/>
+            <ComboBox fx:id="currencyComboBox" prefWidth="100" promptText="Waluta"/>
         </HBox>
+
 
         <HBox spacing="10">
             <Label text="Temat:" minWidth="120"/>

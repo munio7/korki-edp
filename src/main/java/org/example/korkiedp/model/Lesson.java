@@ -39,6 +39,7 @@ public class Lesson {
         this.subject = subject;
         this.price = price;
         this.paid = false;
+        this.updatedBy = tutorId;
         this.createdAt = LocalDateTime.now();
         this.modifiedAt = LocalDateTime.now();
     }

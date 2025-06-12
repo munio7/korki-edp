@@ -6,11 +6,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.example.korkiedp.app.MessagePopupManager;
-import org.example.korkiedp.async.DbWorker;
+import org.example.korkiedp.async.BackgroundWorker;
 import org.example.korkiedp.controller.NewLessonController;
 import org.example.korkiedp.dao.LessonDAO;
 import org.example.korkiedp.dao.TutorStudentDAO;
@@ -23,12 +24,14 @@ import org.example.korkiedp.service.SceneSwitcherService;
 import org.example.korkiedp.session.CurrentSession;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class LessonsComponentController {
     public Label selectedDateLabel;
     @FXML public TableColumn<Lesson, String> subjectColumn;
+    public Button deleteButton;
     @FXML
     private TableView<Lesson> lessonsTable;
     @FXML private TableColumn<Lesson, String> timeColumn;
@@ -42,7 +45,13 @@ public class LessonsComponentController {
     private final ObservableList<Lesson> lessonList = FXCollections.observableArrayList();
 
     public void initialize() {
-        DbWorker.submit( () -> {
+        deleteButton.setVisible(false);
+        lessonsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            deleteButton.setVisible(newVal != null);
+            deleteButton.setManaged(newVal != null);
+        });
+        lessonsTable.setPlaceholder(new Label("Wybierz dzień, aby wyświelić lekcję."));
+        BackgroundWorker.submit( () -> {
             getAllStudentNames();
             Platform.runLater(() -> setTableData());
         });
@@ -71,7 +80,7 @@ public class LessonsComponentController {
     }
 
     private void getLessonForSelectedDay(newDateSelectedEvent event) {
-        DbWorker.submit( () -> {
+        BackgroundWorker.submit( () -> {
             List<Lesson> fromDb = LessonDAO.findByTutorAndDate(CurrentSession.getTutorId(),event.getDate());
             fromDb.sort(Comparator.comparing(Lesson::getStartTime));
             EventBus.publish(new LessonsForDateFoundEvent(fromDb));
@@ -80,7 +89,7 @@ public class LessonsComponentController {
 
     private void refreshTable(LessonsForDateFoundEvent event){
         if(event.getLessons().isEmpty()){
-            MessagePopupManager.sendPopup("Brak lekcji na dany dzień", InfoMessageController.MessageType.ERROR);
+            lessonsTable.setPlaceholder(new Label("Brak lekcji na dany dzień."));
         }
         lessonList.setAll(event.getLessons());
         lessonsTable.refresh();
@@ -94,10 +103,31 @@ public class LessonsComponentController {
             return new SimpleStringProperty(name);
         });
         subjectColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSubject()));
-        statusColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
-                cellData.getValue().isCanceled() ? "Anulowana" :
-                        (cellData.getValue().getAttendance() != null && cellData.getValue().getAttendance()) ? "Obecna" : "Zaplanowana"
-        ));
+        statusColumn.setCellValueFactory(cellData -> {
+            Lesson lesson = cellData.getValue();
+            Boolean canceled = lesson.isCanceled();
+            Boolean paid = lesson.isPaid();
+            String status;
+
+            if (Boolean.TRUE.equals(canceled)) {
+                status = "Anulowana";
+            } else if (Boolean.TRUE.equals(paid)) {
+                status = "Zakończona";
+            } else {
+                // Compute if lesson has already ended
+                LocalDateTime endTime = lesson.getDate()
+                        .atTime(lesson.getStartTime())
+                        .plusMinutes(lesson.getDurationMinutes());
+
+                if (endTime.isBefore(LocalDateTime.now())) {
+                    status = "Nieopłacona";
+                } else {
+                    status = "Planowa";
+                }
+            }
+
+            return new SimpleStringProperty(status);
+        });
 
         lessonsTable.setItems(lessonList);
         studentsListSet = true;
@@ -118,4 +148,28 @@ public class LessonsComponentController {
     public void handleNewLesson(ActionEvent event) {
         SceneSwitcherService.loadMainPanel("/newLesson.fxml", (NewLessonController c) ->{c.setSelectedDate(selectedDate);});
     }
+    @FXML
+    public void handleDeleteLesson(ActionEvent event) {
+        Lesson selected = lessonsTable.getSelectionModel().getSelectedItem();
+
+        if (selected == null) {
+            MessagePopupManager.sendPopup("Nie wybrano lekcji do usunięcia.", InfoMessageController.MessageType.ERROR);
+            return;
+        }
+
+        BackgroundWorker.submit(() -> {
+            boolean deleted = LessonDAO.deleteById(selected.getId());
+            if (deleted) {
+                Platform.runLater(() -> {
+                    lessonList.remove(selected);
+                    MessagePopupManager.sendPopup("Lekcja została usunięta.", InfoMessageController.MessageType.SUCCESS);
+                });
+            } else {
+                Platform.runLater(() ->
+                        MessagePopupManager.sendPopup("Nie udało się usunąć lekcji.", InfoMessageController.MessageType.ERROR)
+                );
+            }
+        });
+    }
+
 }

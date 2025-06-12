@@ -1,30 +1,22 @@
 package org.example.korkiedp.controller;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import org.example.korkiedp.app.MessagePopupManager;
-import org.example.korkiedp.async.DbWorker;
+import org.example.korkiedp.async.BackgroundWorker;
 import org.example.korkiedp.component.InfoMessageController;
 import org.example.korkiedp.dao.StudentDAO;
 import org.example.korkiedp.events.*;
 import org.example.korkiedp.model.Student;
-import org.example.korkiedp.model.TutorStudent;
 import org.example.korkiedp.service.SceneSwitcherService;
 import org.example.korkiedp.session.CurrentSession;
 
 import java.util.List;
-import java.util.SequencedSet;
 
 public class AddStudentModalController {
     public TableColumn<Student,String> firstNameCol;
@@ -44,7 +36,7 @@ public class AddStudentModalController {
 
     @FXML
     public void initialize() {
-
+        studentsTable.setPlaceholder(new Label("Brak uczniów w bazie. Dodaj ich przez poniższy formularz."));
         studentsTable.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2 && studentsTable.getSelectionModel().getSelectedItem() != null) {
                 Student selectedStudent = studentsTable.getSelectionModel().getSelectedItem();
@@ -62,7 +54,7 @@ public class AddStudentModalController {
         phoneCol.setCellValueFactory(new PropertyValueFactory<>("telNumber"));
 
 
-        DbWorker.submit(() -> {
+        BackgroundWorker.submit(() -> {
             List<Student> fromDb = StudentDAO.findAllNotInRelationWithTutorId(CurrentSession.getTutorId());
             EventBus.publish(new allStudentsFoundEvent(fromDb));
         });
@@ -74,7 +66,7 @@ public class AddStudentModalController {
     }
     @FXML
     public void handleAddStudent(ActionEvent event) {
-        DbWorker.submit(() -> {
+        BackgroundWorker.submit(() -> {
             Student student = new Student(studentFirstNameField.getText().trim(),studentLastNameField.getText().trim(),studentLocalization.getText().trim(),studentTelNumber.getText().trim());
             boolean status = StudentDAO.save(student);
             EventBus.publish(new newStudentAddedEvent(student,status));

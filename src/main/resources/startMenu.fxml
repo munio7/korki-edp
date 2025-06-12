@@ -14,7 +14,18 @@
           style="-fx-padding: 20; -fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 10;"
           maxHeight="-Infinity" maxWidth="-Infinity">
         <VBox             spacing="15" StackPane.alignment="CENTER" alignment="CENTER">
+            <Label fx:id="weatherLabel"
+                   text="Pogoda: --"
+                   style="-fx-background-color: linear-gradient(to right, #42a5f5, #1e88e5);
+              -fx-text-fill: white;
+              -fx-font-size: 14px;
+              -fx-font-weight: bold;
+              -fx-padding: 6 14;
+              -fx-background-radius: 20;
+              -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 1);" />
             <HBox spacing="10" alignment="CENTER">
+
+
                 <VBox alignment="CENTER" spacing="10">
                     <Label text="Nieopłacone lekcje" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
                     <TableView fx:id="lessonsTable" prefWidth="600">

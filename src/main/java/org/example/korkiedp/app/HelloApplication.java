@@ -7,8 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import org.example.korkiedp.async.DbWorker;
-import org.example.korkiedp.events.EditStudentEvent;
+import org.example.korkiedp.async.BackgroundWorker;
 import org.example.korkiedp.events.EventBus;
 import org.example.korkiedp.events.ShowMessageEvent;
 import org.example.korkiedp.service.SceneSwitcherService;
@@ -28,7 +27,7 @@ public class HelloApplication extends Application {
 
         // stop thread pool after close
         stage.setOnCloseRequest(event -> {
-            DbWorker.shutdown();
+            BackgroundWorker.shutdown();
         });
 
 

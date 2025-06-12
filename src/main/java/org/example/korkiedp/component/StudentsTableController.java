@@ -5,10 +5,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.example.korkiedp.async.DbWorker;
+import org.example.korkiedp.async.BackgroundWorker;
 import org.example.korkiedp.dao.TutorStudentDAO;
 import org.example.korkiedp.events.EditStudentEvent;
 import org.example.korkiedp.events.EventBus;
@@ -35,10 +36,10 @@ public class StudentsTableController {
 
     @FXML
     public void initialize() {
+        studentsTable.setPlaceholder(new Label("Brak uczniów. Zawrzyj nową relację."));
 
         EventBus.subscribe(allTutorsStudentsFoundEvent.class, (event) -> Platform.runLater(() -> {
             for (TutorStudent student : event.getFromDb()) {
-                System.out.println("znalazlem: " + student);
             }
                     allTutorsStudentsFound(event);
         }));
@@ -62,7 +63,7 @@ public class StudentsTableController {
         });
 
 
-        DbWorker.submit(()->{
+        BackgroundWorker.submit(()->{
             List<TutorStudent> fromDb = TutorStudentDAO.findByTutorId(CurrentSession.getTutorId());
             EventBus.publish(new allTutorsStudentsFoundEvent(fromDb));
         });

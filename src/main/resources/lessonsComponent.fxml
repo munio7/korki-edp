@@ -10,8 +10,15 @@
 <VBox spacing="10" alignment="CENTER" fx:controller="org.example.korkiedp.component.LessonsComponentController" xmlns:fx="http://javafx.com/fxml" style="-fx-background-color: rgba(255,255,255,0.95); -fx-background-radius: 10">
     <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
     <VBox alignment="CENTER" spacing="10">
-        <Label fx:id="selectedDateLabel" text="Lekcje dnia: " style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
-        <Button text="Nowa lekcja" onAction="#handleNewLesson" style="-fx-background-color: #27ae60; -fx-text-fill: white;" />
+        <Label fx:id="selectedDateLabel"  style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+
+        <HBox alignment="CENTER" spacing="20">
+            <Button text="Nowa lekcja" onAction="#handleNewLesson" style="-fx-background-color: #27ae60; -fx-text-fill: white;" />
+            <Button managed="false" fx:id="deleteButton"
+                    text="Usuń wybraną lekcję"
+                    onAction="#handleDeleteLesson"
+                    style="-fx-background-color: #c0392b; -fx-text-fill: white;" />
+        </HBox>
     </VBox>
     <TableView fx:id="lessonsTable" prefWidth="530" prefHeight="400">
         <columns>

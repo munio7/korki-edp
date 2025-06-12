@@ -20,9 +20,28 @@ public class LessonDAO {
         String sql = "SELECT * FROM lesson WHERE tutor_id = ? AND student_id = ?";
         return fetchLessons(sql, tutorId, studentId);
     }
+
+    public static List<Lesson> findByTutorAndStudentIdFinished(int tutorId, int studentId) {
+        String sql = "SELECT * FROM lesson " +
+                "WHERE tutor_id = ? " +
+                "AND student_id = ? " +
+                "AND (date + start_time + (duration_minutes || ' minutes')::interval) < CURRENT_TIMESTAMP";
+        return fetchLessons(sql, tutorId, studentId);
+    }
     public static List<Lesson> findByTutorAndDate(int tutorId, LocalDate date) {
         String sql = "SELECT * FROM lesson WHERE tutor_id = ? AND date = ?";
         return fetchLessons(sql, tutorId, Date.valueOf(date));
+    }
+    public static boolean deleteById(int id) {
+        String sql = "DELETE FROM lesson WHERE id = ?";
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            return stmt.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 
@@ -210,6 +229,44 @@ public class LessonDAO {
 
         return fetchLessons(sql, tutorId);
     }
+    public static BigDecimal sumPaidFinishedLessons(int tutorId, int studentId) {
+        String sql = """
+        SELECT COALESCE(SUM(price), 0)
+        FROM lesson
+        WHERE tutor_id = ? AND student_id = ? 
+          AND paid IS TRUE 
+          AND canceled IS NOT TRUE
+          AND (date + start_time + (duration_minutes || ' minutes')::interval) < CURRENT_TIMESTAMP
+    """;
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, tutorId);
+            stmt.setInt(2, studentId);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next() ? rs.getBigDecimal(1) : BigDecimal.ZERO;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    public static BigDecimal sumUnpaidFinishedLessons(int tutorId, int studentId) {
+        String sql = """
+        SELECT COALESCE(SUM(price), 0)
+        FROM lesson
+        WHERE tutor_id = ? AND student_id = ? 
+          AND paid IS FALSE
+          AND canceled IS NOT TRUE
+          AND (date + start_time + (duration_minutes || ' minutes')::interval) < CURRENT_TIMESTAMP
+    """;
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, tutorId);
+            stmt.setInt(2, studentId);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next() ? rs.getBigDecimal(1) : BigDecimal.ZERO;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

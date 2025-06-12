@@ -3,7 +3,7 @@ package org.example.korkiedp.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
-import org.example.korkiedp.async.DbWorker;
+import org.example.korkiedp.async.BackgroundWorker;
 import org.example.korkiedp.component.InfoMessageController;
 import org.example.korkiedp.dao.TutorStudentDAO;
 import org.example.korkiedp.events.EventBus;
@@ -68,7 +68,7 @@ public class EditStudentController {
                 .collect(Collectors.joining(","));
         tutorStudent.setPreferredDays(selectedDays);
 
-        DbWorker.submit(() ->{
+        BackgroundWorker.submit(() ->{
             boolean status = TutorStudentDAO.updateAll(tutorStudent);
             EventBus.publish(new StudentEditedEvent(tutorStudent, status));
         });

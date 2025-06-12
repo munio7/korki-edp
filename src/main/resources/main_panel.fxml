@@ -13,7 +13,6 @@
             <Button fx:id="studentsViewBtn" text="Uczniowie" styleClass="nav-button" prefWidth="150" onAction="#showStudentsView"/>
             <Button fx:id="calendarViewBtn" text="Kalendarz" styleClass="nav-button" prefWidth="150" onAction="#showCalendarView"/>
             <Button fx:id="paymentsViewBtn" text="Płatności" styleClass="nav-button" prefWidth="150" onAction="#showPaymentsView"/>
-            <Button fx:id="settingsViewBtn" text="Ustawienia" styleClass="nav-button" prefWidth="150" onAction="#showSettingsView"/>
             <Button fx:id="logoutViewBtn" text="Wyloguj"  prefWidth="150" onAction="#logout"/>
         </VBox>
     </left>

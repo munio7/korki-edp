@@ -6,11 +6,10 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
-import org.example.korkiedp.async.DbWorker;
+import org.example.korkiedp.async.BackgroundWorker;
 import org.example.korkiedp.component.InfoMessageController;
 import org.example.korkiedp.dao.TutorStudentDAO;
 import org.example.korkiedp.events.EventBus;
-import org.example.korkiedp.events.StudentEditedEvent;
 import org.example.korkiedp.events.newRelationSetEvent;
 import org.example.korkiedp.model.Student;
 import org.example.korkiedp.model.TutorStudent;
@@ -74,7 +73,7 @@ public class SetInfoOnNewStudentController {
                 .collect(Collectors.joining(","));
         tutorStudent.setPreferredDays(selectedDays);
 
-        DbWorker.submit(() ->{
+        BackgroundWorker.submit(() ->{
             boolean status = TutorStudentDAO.save(tutorStudent);
             EventBus.publish(new newRelationSetEvent(tutorStudent, status));
         });

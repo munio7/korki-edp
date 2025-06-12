@@ -10,7 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.example.korkiedp.app.MessagePopupManager;
-import org.example.korkiedp.async.DbWorker;
+import org.example.korkiedp.async.BackgroundWorker;
 import org.example.korkiedp.component.InfoMessageController;
 import org.example.korkiedp.dao.LessonDAO;
 import org.example.korkiedp.dao.TutorStudentDAO;
@@ -20,21 +20,21 @@ import org.example.korkiedp.events.generalInfoForTutorGatheredEvent;
 import org.example.korkiedp.model.Lesson;
 import org.example.korkiedp.model.TutorStudent;
 import org.example.korkiedp.service.SceneSwitcherService;
+import org.example.korkiedp.service.WeatherService;
 import org.example.korkiedp.session.CurrentSession;
 
 import java.math.BigDecimal;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class StartMenuController {
     public ComboBox<String> attendanceComboBox;
     public ComboBox<String> cancellationReasonComboBox;
     public ComboBox<String> paymentComboBox;
     public TextField durationTextField;
+    public Label weatherLabel;
     @FXML private TableColumn<Lesson, String> topicColumn;
     @FXML private TableColumn<Lesson, String> priceColumn;
     @FXML private TableColumn<Lesson, String> studentColumn;
@@ -66,6 +66,11 @@ public class StartMenuController {
     private Lesson selectedLesson;
 
     public void initialize() {
+        BackgroundWorker.submit(() -> {
+            String weather = WeatherService.getWeather(52.237049, 21.017532);
+            Platform.runLater(() -> weatherLabel.setText("Pogoda: " + weather));
+        });
+        lessonsTable.setPlaceholder(new Label("Wczytywanie..."));
         EventBus.subscribe(generalInfoForTutorGatheredEvent.class,(event) -> Platform.runLater(()-> setInfoLabel(event)));
         EventBus.subscribe(LessonSelectedEvent.class,(event) -> Platform.runLater(() -> setLessonFields(event)));
 
@@ -83,7 +88,7 @@ public class StartMenuController {
             }
         });
 
-        DbWorker.submit(()->{
+        BackgroundWorker.submit(()->{
             activeStudents = TutorStudentDAO.countActiveStudentsByTutorId(CurrentSession.getTutorId());
             lessonsAmount = LessonDAO.countFinishedLessons(CurrentSession.getTutorId());
             earningsAmount = LessonDAO.sumFinishedLessonsPrice(CurrentSession.getTutorId());
@@ -91,10 +96,11 @@ public class StartMenuController {
 
             EventBus.publish(new generalInfoForTutorGatheredEvent(activeStudents, lessonsAmount, earningsAmount));
         });
-        DbWorker.submit(() -> {
+        BackgroundWorker.submit(() -> {
             loadStudentNames();
 
             List<Lesson> finishedLessons = LessonDAO.findFinishedLessonsByTutorId(CurrentSession.getTutorId());
+            if(finishedLessons.isEmpty()) Platform.runLater(()-> lessonsTable.setPlaceholder(new Label("Brak zakończonych nieopłaconych lekcji.")));
 
             Platform.runLater(() -> {
                 setupTableColumns();
@@ -144,11 +150,11 @@ public class StartMenuController {
     private void setupTableColumns() {
         lessonsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        timeColumn.prefWidthProperty().bind(lessonsTable.widthProperty().multiply(0.15));   // 15%
-        dateColumn.prefWidthProperty().bind(lessonsTable.widthProperty().multiply(0.2));    // 20%
-        studentColumn.prefWidthProperty().bind(lessonsTable.widthProperty().multiply(0.25));// 25%
-        topicColumn.prefWidthProperty().bind(lessonsTable.widthProperty().multiply(0.25));  // 25%
-        priceColumn.prefWidthProperty().bind(lessonsTable.widthProperty().multiply(0.15));  // 15%
+        timeColumn.prefWidthProperty().bind(lessonsTable.widthProperty().multiply(0.15));
+        dateColumn.prefWidthProperty().bind(lessonsTable.widthProperty().multiply(0.2));
+        studentColumn.prefWidthProperty().bind(lessonsTable.widthProperty().multiply(0.25));
+        topicColumn.prefWidthProperty().bind(lessonsTable.widthProperty().multiply(0.25));
+        priceColumn.prefWidthProperty().bind(lessonsTable.widthProperty().multiply(0.15));
         timeColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getStartTime().format(DateTimeFormatter.ofPattern("HH:mm"))));
 
@@ -173,7 +179,8 @@ public class StartMenuController {
         durationTextField.setText(Integer.toString(event.getLesson().getDurationMinutes()));
         priceTextField.setText(event.getLesson().getPrice().toString());
 
-        attendanceComboBox.setValue(event.getLesson().getAttendance() != null ? event.getLesson().getAttendance().toString() : null);
+        attendanceComboBox.setValue(event.getLesson().getAttendance() != null ? (event.getLesson().getAttendance() ? "Tak" : "Nie") : null);
+        paymentComboBox.setValue(event.getLesson().isPaid() ? "Tak" : "Nie");
         cancellationReasonComboBox.setValue(event.getLesson().getCancelReason());
 
         cancellationReasonBox.setVisible(false);
@@ -186,7 +193,7 @@ public class StartMenuController {
 
     }
     private void refreshLessonTable() {
-        DbWorker.submit(() -> {
+        BackgroundWorker.submit(() -> {
             List<Lesson> updatedLessons = LessonDAO.findFinishedLessonsByTutorId(CurrentSession.getTutorId());
             updatedLessons.sort((l1, l2) -> {
                 int dateCompare = l1.getDate().compareTo(l2.getDate());
@@ -274,7 +281,7 @@ public class StartMenuController {
             }
 
             // Save to DB
-            DbWorker.submit(() -> {
+            BackgroundWorker.submit(() -> {
                 LessonDAO.update(selectedLesson); // assumes you have an update method
                 MessagePopupManager.sendPopup("Zapisano zmiany", InfoMessageController.MessageType.SUCCESS);
                 Platform.runLater(() -> refreshLessonTable());

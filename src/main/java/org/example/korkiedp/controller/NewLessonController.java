@@ -1,20 +1,21 @@
 package org.example.korkiedp.controller;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
 import org.example.korkiedp.app.MessagePopupManager;
-import org.example.korkiedp.async.DbWorker;
+import org.example.korkiedp.async.BackgroundWorker;
 import org.example.korkiedp.component.InfoMessageController;
 import org.example.korkiedp.dao.LessonDAO;
 import org.example.korkiedp.dao.TutorStudentDAO;
 import org.example.korkiedp.events.*;
+import org.example.korkiedp.model.CurrencyCode;
 import org.example.korkiedp.model.Lesson;
-import org.example.korkiedp.model.Tutor;
 import org.example.korkiedp.model.TutorStudent;
+import org.example.korkiedp.service.CurrencyService;
 import org.example.korkiedp.service.SceneSwitcherService;
 import org.example.korkiedp.session.CurrentSession;
 
@@ -33,15 +34,20 @@ public class NewLessonController {
     public TextField durationField;
     public TextField priceField;
     public TextField topicField;
+    @FXML private ComboBox<CurrencyCode> currencyComboBox;
     @FXML private TextField hourField;
     @FXML private TextField minuteField;
     @FXML private ComboBox<String> studentComboBox;
 
     private List<TutorStudent> tutorStudents;
     private Map<String,TutorStudent> studentsName = new HashMap<>();
+    private CurrencyCode lastSelectedCurrency = CurrencyCode.PLN;
+
 
     @FXML
     private void initialize() {
+        currencyComboBox.getItems().setAll(CurrencyCode.values());
+        currencyComboBox.setValue(CurrencyCode.PLN); // default if needed
         EventBus.subscribe(allTutorsStudentsFoundEvent.class, event -> setStudentsComboBox(event));
         EventBus.subscribe(newLessonEvent.class, event -> {
             if (event.getStatus()) {
@@ -54,9 +60,12 @@ public class NewLessonController {
 
         studentComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             priceField.setText(studentsName.get(newValue).getDefault_price().toString());
+            lastSelectedCurrency = CurrencyCode.PLN;
+            currencyComboBox.setValue(lastSelectedCurrency);
         });
+        currencyComboBox.valueProperty().addListener((obs, oldVal, newVal) -> recalculatePrice());
 
-        DbWorker.submit( () -> {
+        BackgroundWorker.submit( () -> {
             List<TutorStudent> fromDb = TutorStudentDAO.findByTutorId(CurrentSession.getTutorId());
             tutorStudents = fromDb;
             EventBus.publish(new allTutorsStudentsFoundEvent(fromDb));
@@ -89,13 +98,6 @@ public class NewLessonController {
         studentsName = map;
     }
 
-    public Map<String, Integer>  setStudentsMap(List<TutorStudent> fromDb) {
-        Map<String, Integer> map = new HashMap<>();
-        for (TutorStudent ts : fromDb) {
-            map.put(ts.getDefault_name() ,ts.getStudentId());
-        }
-        return map;
-    }
     private void setTimeField(TextField timeField) {
         timeField.setTextFormatter(new javafx.scene.control.TextFormatter<>(change -> {
             if (change.getText().matches("[0-9]*")) {
@@ -106,6 +108,46 @@ public class NewLessonController {
             }
             return null;
         }));
+    }
+
+    private void recalculatePrice() {
+        CurrencyCode newCurrency = currencyComboBox.getValue();
+
+        // Jeśli to pierwsze ustawienie lub ta sama waluta, nic nie rób
+        if (newCurrency == lastSelectedCurrency) return;
+
+        String priceText = priceField.getText();
+        if (priceText == null || priceText.isBlank()) return;
+
+        BigDecimal currentValue;
+        try {
+            currentValue = new BigDecimal(priceText);
+        } catch (NumberFormatException e) {
+            Platform.runLater(() ->
+                    MessagePopupManager.sendPopup("Nieprawidłowa cena – wpisz liczbę.", InfoMessageController.MessageType.ERROR)
+            );
+            return;
+        }
+
+        BackgroundWorker.submit(() -> {
+            double oldRate = lastSelectedCurrency == CurrencyCode.PLN ? 1.0 : CurrencyService.getExchangeRate(lastSelectedCurrency.name());
+            double newRate = newCurrency == CurrencyCode.PLN ? 1.0 : CurrencyService.getExchangeRate(newCurrency.name());
+
+            if (oldRate == -1 || newRate == -1) {
+                Platform.runLater(() ->
+                        MessagePopupManager.sendPopup("Nie udało się pobrać kursu waluty.", InfoMessageController.MessageType.ERROR)
+                );
+                return;
+            }
+
+            BigDecimal plnValue = currentValue.multiply(BigDecimal.valueOf(oldRate));
+            BigDecimal newValue = plnValue.divide(BigDecimal.valueOf(newRate), 2, RoundingMode.HALF_UP);
+
+            Platform.runLater(() -> {
+                priceField.setText(newValue.toPlainString());
+                lastSelectedCurrency = newCurrency;
+            });
+        });
     }
 
     @FXML
@@ -148,13 +190,10 @@ public class NewLessonController {
         goBack();
     }
 
+    @FXML
     public void handleSave(ActionEvent event) {
         if (studentComboBox.getValue() == null || studentComboBox.getValue().isBlank()) {
             MessagePopupManager.sendPopup("Wybierz studenta!", InfoMessageController.MessageType.ERROR);
-            return;
-        }
-        if (priceField.getText() == null || priceField.getText().isBlank()) {
-            MessagePopupManager.sendPopup("Ustal cenę!", InfoMessageController.MessageType.ERROR);
             return;
         }
         if (subjectComboBox.getValue() == null || subjectComboBox.getValue().isBlank()) {
@@ -162,35 +201,55 @@ public class NewLessonController {
             return;
         }
         if (datePicker.getValue() == null) {
-            MessagePopupManager.sendPopup("Wybierz date!", InfoMessageController.MessageType.ERROR);
+            MessagePopupManager.sendPopup("Wybierz datę!", InfoMessageController.MessageType.ERROR);
             return;
         }
-        if (minuteField.getText() == null || minuteField.getText().isBlank() || hourField.getText() == null || hourField.getText().isBlank()) {
+        if (minuteField.getText().isBlank() || hourField.getText().isBlank()) {
             MessagePopupManager.sendPopup("Wybierz godzinę!", InfoMessageController.MessageType.ERROR);
             return;
         }
+        if (durationField.getText().isBlank()) {
+            MessagePopupManager.sendPopup("Określ długość lekcji!", InfoMessageController.MessageType.ERROR);
+            return;
+        }
 
-        BigDecimal hourlyPrice = new BigDecimal(priceField.getText());
+        String priceText = priceField.getText();
+        if (priceText == null || priceText.isBlank()) {
+            MessagePopupManager.sendPopup("Ustal cenę!", InfoMessageController.MessageType.ERROR);
+            return;
+        }
+
         int durationMinutes = parseInt(durationField.getText());
-        BigDecimal finalPrice = hourlyPrice
-                .multiply(BigDecimal.valueOf(durationMinutes)).divide(BigDecimal.valueOf(60), 2, RoundingMode.HALF_UP);
+        CurrencyCode selectedCurrency = currencyComboBox.getValue();
 
-        Lesson lesson = new Lesson(
-                CurrentSession.getTutorId(),
-                studentsName.get(studentComboBox.getValue()).getStudentId(),
-                datePicker.getValue(),
-                LocalTime.of(parseInt(hourField.getText()), parseInt(minuteField.getText())),
-                durationMinutes,
-                finalPrice,
-                topicField.getText(),
-                subjectComboBox.getValue()
-        );
+        BackgroundWorker.submit(() -> {
+            double rate = selectedCurrency == CurrencyCode.PLN ? 1.0 : CurrencyService.getExchangeRate(selectedCurrency.name());
+            if (rate == -1) {
+                Platform.runLater(() ->
+                        MessagePopupManager.sendPopup("Nie udało się pobrać kursu waluty.", InfoMessageController.MessageType.ERROR)
+                );
+                return;
+            }
 
-        DbWorker.submit( () -> {
-            boolean status =  LessonDAO.save(lesson);
+            BigDecimal userAmount = new BigDecimal(priceText);
+            BigDecimal finalPricePLN = userAmount.multiply(BigDecimal.valueOf(rate)).setScale(2, RoundingMode.HALF_UP);
+
+            Lesson lesson = new Lesson(
+                    CurrentSession.getTutorId(),
+                    studentsName.get(studentComboBox.getValue()).getStudentId(),
+                    datePicker.getValue(),
+                    LocalTime.of(parseInt(hourField.getText()), parseInt(minuteField.getText())),
+                    durationMinutes,
+                    finalPricePLN,
+                    topicField.getText(),
+                    subjectComboBox.getValue()
+            );
+
+            boolean status = LessonDAO.save(lesson);
             EventBus.publish(new newLessonEvent(status));
         });
     }
+
 
     private void goBack(){
         SceneSwitcherService.loadMainPanel("/calendar.fxml");
