@@ -39,3 +39,4 @@ build/
 
 ### my files ###
 src/main/resources/config.properties
+.env

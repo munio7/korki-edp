@@ -1,5 +1,6 @@
 package org.example.korkiedp.service;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -9,12 +10,14 @@ import java.net.URL;
 
 public class WeatherService {
 
-    private static final String API_KEY = "690346d65c1cc38c52f9a3d25f03455a";
+        private static final Dotenv dotenv = Dotenv.load();
+
+        public static final String API_KEY = dotenv.get("API_KEY");
 
     public static String getWeather(double lat, double lon) {
         String urlString = String.format(
                 "https://api.openweathermap.org/data/2.5/weather?lat=%.6f&lon=%.6f&appid=%s&units=metric&lang=pl",
-                lat, lon, API_KEY);
+                lat, lon, WeatherService.API_KEY);
 
         try {
             URL url = new URL(urlString);
